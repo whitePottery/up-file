@@ -1,0 +1,28 @@
+{
+    "name": "whitepottery/up-file",
+    "description": "Expa",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "whitePottery",
+            "email": "orasvr@mail.ru",
+            "homepage": "https://github.com/whitePottery/up-file"
+        }
+    ],
+    "require": {
+        "php": "^7.3|^8.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "UpFile\\Providers\\UpFileServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "UpFile\\": "src"
+        }
+    }
+}
