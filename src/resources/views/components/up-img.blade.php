@@ -50,7 +50,7 @@
 }
 </style>
     <div class="form-row">
-      <label>Изображения:</label>
+  <label>Изображения:</label>
       <div class="img-list" id="js-file-list"></div>
       <input id="js-file" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif">
     </div>
@@ -137,7 +137,7 @@
   */
   function sendFile(inputFile){
 
-    sendAjax('POST', '/add-image/'+typePage+'/'+{!! $postId??'0' !!} , createImageData(inputFile), function(msg){
+    sendAjax('POST', '/add-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , createImageData(inputFile), function(msg){
       // console.log(msg);
       const data = JSON.parse(msg);
 

@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class PageUpFileController extends Controller
+class UpFileMainController extends Controller
 {
 
 

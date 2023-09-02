@@ -2,7 +2,6 @@
 
 namespace UpFile\Providers;
 
-use App\Console\Commands\CreatePackage;
 use Illuminate\Support\ServiceProvider;
 
 class UpFileServiceProvider extends ServiceProvider
@@ -15,8 +14,6 @@ class UpFileServiceProvider extends ServiceProvider
         'views'       => 'views/up-file',
         'js'          => 'js/up-file',
     ];
-
-
 
     /**
      * Register services.
@@ -41,16 +38,21 @@ class UpFileServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \UpFile\Console\Commands\ExampleCommand::class,
-]);
+            ]);
         }
+
+        $this->loadViewComponentsAs('upfile', [
+            \UpFile\View\Components\UpImg::class,
+            // Button::class,
+        ]);
 
         $this->loadViewsFrom($pathPackege . 'resources/views', 'up-file');
 
-        //$this->loadRoutesFrom(__DIR__.'/../routes/up-file.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/up-file.php');
 
         foreach ($this->copyList as $key => $pathTo) {
 
-            $pathFrom = $pathPackege.'copy/' . $key;
+            $pathFrom = $pathPackege . 'copy/' . $key;
 
             if (file_exists($pathFrom)) {
                 $this->publishes([
@@ -59,7 +61,6 @@ class UpFileServiceProvider extends ServiceProvider
             }
 
         }
-
 
         /*
     $this->publishes([

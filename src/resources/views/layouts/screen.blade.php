@@ -15,13 +15,17 @@
             @include('up-file::layouts.sidebar')
 
             <div class="col-md-8 mt-4 mainContent">
-                @if ($errors->all())
-                    @foreach ($errors->all() as $V)
-                        <div class="card m-4 p-4 alert alert-danger">
-                            {{$V}}
-                        </div>
-                    @endforeach
-                @endif
+{{-- @if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>
+            {{ $error }}
+        </li>
+        @endforeach
+    </ul>
+</div>
+@endif --}}
                 @yield('content')
             </div>
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace UpFile\View\Components;
 
 use Illuminate\View\Component;
 
@@ -9,6 +9,8 @@ class UpImg extends Component
     public $typePage;
 
     public $postId;
+
+        public $user_id;
     // public $modelImg;
     /**
      * Create a new component instance.
@@ -22,6 +24,8 @@ class UpImg extends Component
 
         $this->postId = $postId;
 
+        $this->user_id = auth()->id();
+
         // $this->modelImg = $modelImg?json_encode($modelImg):0;
     }
 
@@ -32,7 +36,7 @@ class UpImg extends Component
      */
     public function render()
     {
-        return view('components.up-img');
+        return view('up-file::components.up-img');
     }
 }
 
