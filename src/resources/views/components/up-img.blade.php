@@ -102,7 +102,7 @@
 
 
 
-  loadImageTmp();
+  getImage();
 
 
 
@@ -115,9 +115,9 @@
   /*
 
   */
-  function loadImageTmp(){
+  function getImage(){
 
-    sendAjax('GET', '/get-image/'+typePage+'/'+{!! $postId??'0' !!} , '', function(msg){
+    sendAjax('GET', '/get-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , '', function(msg){
 
       const data = JSON.parse(msg);
 
@@ -138,7 +138,7 @@
   function sendFile(inputFile){
 
     sendAjax('POST', '/add-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , createImageData(inputFile), function(msg){
-      // console.log(msg);
+      console.log(msg);
       const data = JSON.parse(msg);
 
       if(!data.error) {

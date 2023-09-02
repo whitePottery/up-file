@@ -3,11 +3,9 @@ namespace UpFile\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use UpFile\Models\UploadImage;
-
 
 class UploadImageController extends Controller
 {
@@ -27,12 +25,7 @@ class UploadImageController extends Controller
 
         $upImg = new UploadImage;
 
-        // $upImg->name = $request->file('image')->getClientOriginalName();
-
         $upImg->image = $request->file('image')->store('public/images');
-
-        // $upImg->image = Storage::putFile('public/images', $request->file('image'));
-
 
         // Создаем миниатюру изображения и сохраняем ее
         $img = Image::make(Storage::path($upImg->image));
@@ -51,18 +44,19 @@ class UploadImageController extends Controller
 
         $res = $upImg->save();
 
-
         $responce = ["url" => $upImg->url, "id" => $upImg->id];
-
-        // $responce = ["error" => $upImg->post_id];
 
         return response()->json($responce);
     }
 
-    public function getImage(UploadImage $upImg, $typePage, $postId = 0)
+    public function getImage(UploadImage $upImg, $typePage, $user_id, $postId = 0)
     {
 
-        $images = $upImg->select('id', 'url', 'post_id')->where('type_page', $typePage)->where('post_id', $postId)->get();
+        if (0 == $postId) {
+            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('type_page', $typePage)->where('post_id', $postId)->where('user_id', $user_id)->get();
+        } else {
+            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('type_page', $typePage)->where('post_id', $postId)->get();
+        }
 
         $responce = ['images' => $images];
 
