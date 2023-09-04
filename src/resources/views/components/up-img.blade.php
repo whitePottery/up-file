@@ -1,4 +1,7 @@
+
 <div>
+  @once
+  @push('css')
   <style>
 
 /* Стили для вывода превью */
@@ -49,6 +52,9 @@
     width: 90%;
 }
 </style>
+@endpush
+@endonce
+
     <div class="form-row">
   <label>Изображения:</label>
       <div class="img-list" id="js-file-list-{{ $name }}"></div>
@@ -58,6 +64,10 @@
     {{-- <input type="hidden" id="route-name" value="{{Route::currentRouteName();}}" name="route-name"> --}}
 {{--     <input type="hidden" id="route-name" value="{{Route::currentRouteName();}}" name="route-name"> --}}
 
+{{-- @if(!isset($upimg))
+{{ $upimg??'200' }}
+@php $upimg=1; @endphp --}}
+@once
 <div class="modal-alt" tabindex="-1"  id="alt-text">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -78,50 +88,37 @@
     </div>
   </div>
 </div>
+
+@push('js_scripts')
+
 <script>
-class UpImg_{{ $name }} {
 
-   typePage = {!! $typePage !!};
-
+var UpImg_obj = {
 
 
-  divActiveImage = '';
-  inputAlt = '';
-
-
-  inputFile = document.getElementById('js-file-{{ $name }}');
-
-  // const routeName = document.getElementById('route-name').value;
-
-
-// if(0!=images) {
-//         images.forEach( function(item, index, array) {
-// // console.log(item.url);
-//           addHiddenInput(item.id, item.url, item.alt)
-//         });
-// }
+names :'',
+  // typePage : {!! $typePage !!},
+  divActiveImage : '',
+  inputAlt : '',
 
 
 
+  // eventInputFile(name){
 
+  //   inputFile : document.getElementById('js-file-'+$name),
 
-eventInputFile(){
+  //   inputFile.onchange = function() {
 
-   inputFile.onchange = function() {
-
-      sendFile(inputFile);
-  }
-}
-
-
-
+  //     sendFile(inputFile);
+  // }
+  // },
 
   /*
 
   */
-  getImage(){
+  getImage(typePage, name){
 
-    this.sendAjax('GET', '/get-image/'+this.typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , '', function(msg){
+    UpImg_obj.sendAjax('GET', '/get-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , '', function(msg){
 
       const data = JSON.parse(msg);
 
@@ -129,19 +126,19 @@ eventInputFile(){
 
         data.images.forEach( function(item, index, array) {
 
-          this.addHiddenInput(item.id, item.url, item.alt, item.post_id)
+          UpImg_obj.addHiddenInput(item.id, item.url, item.alt, item.post_id, name)
         });
       }
 
     });
 
-  }
+  },
   /*
 
   */
   sendFile(inputFile){
 
-    this.sendAjax('POST', '/add-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , createImageData(inputFile), function(msg){
+    sendAjax('POST', '/add-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , createImageData(inputFile), function(msg){
       console.log(msg);
       const data = JSON.parse(msg);
 
@@ -152,7 +149,7 @@ eventInputFile(){
 
     });
 
-  }
+  },
   sendAlt(alt){
 // console.log(alt.value);
 
@@ -171,13 +168,13 @@ eventInputFile(){
 
     });
 
-  }
+  },
   /*
 
    */
-  addHiddenInput(id, url, alt='', post_id=0){
-
-    let divImg = document.getElementById('js-file-list-{{ $name }}');
+  addHiddenInput(id, url, alt='', post_id=0, name){
+console.log(name);
+    let divImg = document.getElementById(name);
     let tmpStyle = post_id?'':'style = "opacity:0.5"';
     let altValue = alt??'image-'+id;
     let HtmlCode = `<div class="img-item" id="`+id+`">
@@ -187,9 +184,9 @@ eventInputFile(){
             <input type="hidden" value="`+altValue+`" id="alt`+id+`"class="alt">
          </div>
           `;
-
+console.log(divImg);
     divImg.insertAdjacentHTML( 'beforeend', HtmlCode );
-  }
+  },
   /*
 
  */
@@ -213,7 +210,7 @@ eventInputFile(){
     inputModal.focus();
     modalDialog.style.top = rect.top-300+"px";
     divActiveImage.style.border = "#FF0000FF 7px solid";
-  }
+  },
   /*
 
    */
@@ -236,7 +233,7 @@ eventInputFile(){
     }
 
     closeModalAlt();
-  }
+  },
 /*
 
  */
@@ -247,7 +244,7 @@ eventInputFile(){
     modal.style.display='none';
 
     divActiveImage.style.border = "none";
-  }
+  },
 
   /*
   Удаление загруженной картинки
@@ -272,7 +269,7 @@ eventInputFile(){
 
     });
 
-  }
+  },
 
 
   createImageData(inputFile){
@@ -284,25 +281,86 @@ eventInputFile(){
     formData.append('image', file); // добавляем файл в объект FormData
 
     return formData;
-  }
+  },
   /*
   отправка ajax запросов на сервер
    */
   sendAjax(type, url, data, callback){
 
-    let token = document.querySelector('meta[name="csrf-token"]').content;
-    let xmlhttp;
+    let token = document.querySelector('meta[name="csrf-token"]').content
 
     if (window.XMLHttpRequest)
     {// код для IE7+, Firefox, Chrome, Opera, Safari
-      let xmlhttp=new XMLHttpRequest();
+      xmlhttp=new XMLHttpRequest();
     }
     else
     {// код для IE6, IE5
-     let xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
     }
 
-    xmlhttp.onreadystatechange= ()=>
+    xmlhttp.onreadystatechange=function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        callback(xmlhttp.responseText);
+      }
+    }
+
+    xmlhttp.open(type,url,true);
+    xmlhttp.setRequestHeader("X-CSRF-TOKEN",token);
+    xmlhttp.send(data);
+  },
+}
+
+  function getImage(typePage, name){
+
+    sendAjax('GET', '/get-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , '', function(msg){
+
+      const data = JSON.parse(msg);
+
+      if(!data.error) {
+
+        let divImg = document.getElementById(name);
+
+        data.images.forEach( function(item, index, array) {
+
+          addHiddenInput(item.id, item.url, item.alt, item.post_id, divImg)
+        });
+      }
+
+    });
+
+  }
+
+ function   addHiddenInput(id, url, alt='', post_id=0, divImg){
+
+
+    let tmpStyle = post_id?'':'style = "opacity:0.5"';
+    let altValue = alt??'image-'+id;
+    let HtmlCode = `<div class="img-item" id="`+id+`">
+    <img src="`+url+`" `+tmpStyle+`onclick="editAlt(`+id+`);">
+            <a herf="#" class="img-delete" onclick="removeImg(`+id+`); return false;" title="Удалить изображение"></a>
+            <a herf="#" class="img-croping" onclick="imgCroping(`+id+`);" title="Сделать превью для картинки"></a>
+            <input type="hidden" value="`+altValue+`" id="alt`+id+`"class="alt">
+         </div>
+          `;
+console.log(divImg);
+    divImg.insertAdjacentHTML( 'beforeend', HtmlCode );
+  }
+   function    sendAjax(type, url, data, callback){
+
+    let token = document.querySelector('meta[name="csrf-token"]').content
+
+    if (window.XMLHttpRequest)
+    {// код для IE7+, Firefox, Chrome, Opera, Safari
+      xmlhttp=new XMLHttpRequest();
+    }
+    else
+    {// код для IE6, IE5
+      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    xmlhttp.onreadystatechange=function()
     {
       if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
@@ -314,16 +372,38 @@ eventInputFile(){
     xmlhttp.setRequestHeader("X-CSRF-TOKEN",token);
     xmlhttp.send(data);
   }
+   // window.onload = function() {
+  let elems = document.getElementsByClassName('img-list');
+
+async function processArray(array) {
+  for (const item of array) {
+    await getImage( {!! $typePage !!},item.id);
+  }
+  console.log('Done!');
 }
 
-const upImg_{{ $name }} = new UpImg_{{ $name }}()
+processArray(Array.from(elems)) ;
+//     Array.from(elems).forEach( (item, index, array) =>{
+//       console.log(item.id);
+//       getImage( {!! $typePage !!},item.id);
+//         console.log(item.id);
+// });
+ // };
+</script>
+@endpush
+@endonce
 
-  upImg_{{ $name }}.getImage();
+{{-- @push('js_scripts')
+<script>
+   window.onload = function() {
 
-// upImg_{{ $name }}.eventInputFile();
 
-
+     UpImg_obj.getImage( {!! $typePage !!},'{{ $name }}');
+   };
 
 </script>
+@endpush --}}
+
+
 
 </div>

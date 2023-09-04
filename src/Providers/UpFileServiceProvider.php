@@ -7,14 +7,6 @@ use Illuminate\Support\ServiceProvider;
 class UpFileServiceProvider extends ServiceProvider
 {
 
-    private $copyList = [
-
-        'migrations'  => 'migrations',
-        'Controllers' => 'Http/Controllers/UpFile',
-        'views'       => 'views/up-file',
-        'js'          => 'js/up-file',
-    ];
-
     /**
      * Register services.
      *
@@ -33,6 +25,14 @@ class UpFileServiceProvider extends ServiceProvider
     public function boot()
     {
 
+        $copyList = [
+
+            'migrations'  => database_path('migrations'),
+            'Controllers' => app_path('Http/Controllers/UpFile'),
+            'views'       => resource_path('views/up-file'),
+            'js'          => public_path('js/up-file'),
+        ];
+
         $pathPackege = base_path('vendor/whitepottery/up-file/src/');
 
         if ($this->app->runningInConsole()) {
@@ -50,13 +50,13 @@ class UpFileServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/up-file.php');
 
-        foreach ($this->copyList as $key => $pathTo) {
+        foreach ($copyList as $key => $pathTo) {
 
             $pathFrom = $pathPackege . 'copy/' . $key;
 
             if (file_exists($pathFrom)) {
                 $this->publishes([
-                    $pathFrom => database_path($pathTo),
+                    $pathFrom => $pathTo,
                 ], 'public');
             }
 

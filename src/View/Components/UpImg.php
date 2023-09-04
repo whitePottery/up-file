@@ -6,6 +6,7 @@ use Illuminate\View\Component;
 
 class UpImg extends Component
 {
+
     public $name;
 
     public $typePage;
@@ -42,6 +43,7 @@ class UpImg extends Component
     public function render()
     {
         return view('up-file::components.up-img');
+
     }
 }
 
