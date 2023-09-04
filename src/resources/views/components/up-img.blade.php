@@ -51,8 +51,8 @@
 </style>
     <div class="form-row">
   <label>Изображения:</label>
-      <div class="img-list" id="js-file-list"></div>
-      <input id="js-file" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif">
+      <div class="img-list" id="js-file-list-{{ $name }}"></div>
+      <input id="js-file-{{ $name }}" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif">
     </div>
 {{--     <input type="text" value="test" name="path_mini_img"> --}}
     {{-- <input type="hidden" id="route-name" value="{{Route::currentRouteName();}}" name="route-name"> --}}
@@ -79,16 +79,17 @@
   </div>
 </div>
 <script>
+class UpImg_{{ $name }} {
 
-  let typePage = {!! $typePage !!};
-
-
-
-  let divActiveImage = '';
-  let inputAlt = '';
+   typePage = {!! $typePage !!};
 
 
-  let inputFile = document.getElementById('js-file');
+
+  divActiveImage = '';
+  inputAlt = '';
+
+
+  inputFile = document.getElementById('js-file-{{ $name }}');
 
   // const routeName = document.getElementById('route-name').value;
 
@@ -102,22 +103,25 @@
 
 
 
-  getImage();
 
 
+eventInputFile(){
 
-
-
-  inputFile.onchange = function() {
+   inputFile.onchange = function() {
 
       sendFile(inputFile);
   }
+}
+
+
+
+
   /*
 
   */
-  function getImage(){
+  getImage(){
 
-    sendAjax('GET', '/get-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , '', function(msg){
+    this.sendAjax('GET', '/get-image/'+this.typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , '', function(msg){
 
       const data = JSON.parse(msg);
 
@@ -125,7 +129,7 @@
 
         data.images.forEach( function(item, index, array) {
 
-          addHiddenInput(item.id, item.url, item.alt, item.post_id)
+          this.addHiddenInput(item.id, item.url, item.alt, item.post_id)
         });
       }
 
@@ -135,9 +139,9 @@
   /*
 
   */
-  function sendFile(inputFile){
+  sendFile(inputFile){
 
-    sendAjax('POST', '/add-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , createImageData(inputFile), function(msg){
+    this.sendAjax('POST', '/add-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , createImageData(inputFile), function(msg){
       console.log(msg);
       const data = JSON.parse(msg);
 
@@ -149,7 +153,7 @@
     });
 
   }
-  function sendAlt(alt){
+  sendAlt(alt){
 // console.log(alt.value);
 
     // divActiveImage = document.getElementById(id);
@@ -171,9 +175,9 @@
   /*
 
    */
-  function addHiddenInput(id, url, alt='', post_id=0){
+  addHiddenInput(id, url, alt='', post_id=0){
 
-    let divImg = document.getElementById('js-file-list');
+    let divImg = document.getElementById('js-file-list-{{ $name }}');
     let tmpStyle = post_id?'':'style = "opacity:0.5"';
     let altValue = alt??'image-'+id;
     let HtmlCode = `<div class="img-item" id="`+id+`">
@@ -189,7 +193,7 @@
   /*
 
  */
-  function editAlt(id){
+  editAlt(id){
 
     divActiveImage = document.getElementById(id);
     inputAlt = divActiveImage.querySelector('.alt');
@@ -213,7 +217,7 @@
   /*
 
    */
-  function saveModalAlt(){
+  saveModalAlt(){
 
         inputAlt = divActiveImage.querySelector('.alt');
 
@@ -236,7 +240,7 @@
 /*
 
  */
-  function closeModalAlt(){
+  closeModalAlt(){
 
     let modal = document.getElementById('alt-text');
 
@@ -248,7 +252,7 @@
   /*
   Удаление загруженной картинки
   */
-  function removeImg(id){
+  removeImg(id){
 
     divActiveImage = document.getElementById(id);
 // console.log(divActiveImage);
@@ -271,7 +275,7 @@
   }
 
 
-  function createImageData(inputFile){
+  createImageData(inputFile){
 
     const file = inputFile.files[0]; // получаем выбранный файл
 
@@ -284,20 +288,21 @@
   /*
   отправка ajax запросов на сервер
    */
-  function sendAjax(type, url, data, callback){
+  sendAjax(type, url, data, callback){
 
-    let token = document.querySelector('meta[name="csrf-token"]').content
+    let token = document.querySelector('meta[name="csrf-token"]').content;
+    let xmlhttp;
 
     if (window.XMLHttpRequest)
     {// код для IE7+, Firefox, Chrome, Opera, Safari
-      xmlhttp=new XMLHttpRequest();
+      let xmlhttp=new XMLHttpRequest();
     }
     else
     {// код для IE6, IE5
-      xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+     let xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
     }
 
-    xmlhttp.onreadystatechange=function()
+    xmlhttp.onreadystatechange= ()=>
     {
       if (xmlhttp.readyState==4 && xmlhttp.status==200)
       {
@@ -309,6 +314,15 @@
     xmlhttp.setRequestHeader("X-CSRF-TOKEN",token);
     xmlhttp.send(data);
   }
+}
+
+const upImg_{{ $name }} = new UpImg_{{ $name }}()
+
+  upImg_{{ $name }}.getImage();
+
+// upImg_{{ $name }}.eventInputFile();
+
+
 
 </script>
 

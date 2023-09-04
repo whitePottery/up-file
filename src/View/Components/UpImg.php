@@ -6,20 +6,25 @@ use Illuminate\View\Component;
 
 class UpImg extends Component
 {
+    public $name;
+
     public $typePage;
 
     public $postId;
 
-        public $user_id;
+    public $user_id;
     // public $modelImg;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($typePage=0, $postId = 0) //, $modelImg = false)
+    public function __construct($name, $typePage = 0, $postId = 0) //, $modelImg = false)
 
     {
+
+        $this->name = $name;
+
         $this->typePage = $typePage;
 
         $this->postId = $postId;
