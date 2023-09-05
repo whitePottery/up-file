@@ -1,5 +1,7 @@
     <div>
-        <img height="200" src="{{ old('image_base64-'.$typePage)??'/images/no_photo.jpg'}}" id="img-croping-{{ $typePage }}" alt="{{ __('upfile.preview_image') }}">
+        <img height="200" src="{{ old('image_src_'.$typePage)??'/images/no_photo.jpg'}}" id="img-croping-{{ $typePage }}" alt="{{ __('upfile.preview_image') }}">
+        <input type="hidden" id="image_base64_{{ $typePage }}" name="image_base64[{{ $typePage }}]" value="">
+{{--         <input type="hidden" id="image_srs_{{ $typePage }}'" name="image_src_{{ $typePage }}" value=""> --}}
     </div>
 @once
     <div>
@@ -73,9 +75,11 @@
 
                     $('#img-croping-'+typePage).attr('src',resp);
 
+                    $('#image_base64_'+typePage).attr('value',resp);
+
                     $('.modal').modal('hide');
 
-                  $('<input type="hidden" id="image_base64_'+typePage+'" name="image_base64['+typePage+']" value="'+resp+'">').appendTo('#form');
+                  // $('<input type="hidden" id="image_base64_'+typePage+'" name="image_base64['+typePage+']" value="'+resp+'">').appendTo('#form');
 
 
 
