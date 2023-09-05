@@ -44,7 +44,7 @@ class UploadImageController extends Controller
 
         $res = $upImg->save();
 
-        $responce = ["url" => $upImg->url, "id" => $upImg->id];
+        $responce = ['image'=>$this->cardCreate($upImg)];;
 
         return response()->json($responce);
     }
@@ -85,16 +85,23 @@ class UploadImageController extends Controller
 /*
 
  */
-    public function imageAlt(Request $request, UploadImage $image)
+    public function imageAlt(Request $request)
     {
 
         // $modelImage = $this->modelCheck($request);
 
         // $img = $modelImage->where('id', $request->id)->first();
-
+        $image      = UploadImage::find($request->id);
         $image->alt = $request->alt;
 
         return $image->save();
+    }
+
+    private function cardCreate($image)
+    {
+        $image->tmpStyle = $image->post_id ? '' : 'style = "opacity:0.5"';
+
+        return (string)\View::make('up-file::components.up-img-card', ['images' => [$image]]);
     }
 
     /*

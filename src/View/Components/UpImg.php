@@ -3,11 +3,12 @@
 namespace UpFile\View\Components;
 
 use Illuminate\View\Component;
+use UpFile\Models\UploadImage;
 
 class UpImg extends Component
 {
 
-    public $name;
+    public $images;
 
     public $typePage;
 
@@ -20,17 +21,17 @@ class UpImg extends Component
      *
      * @return void
      */
-    public function __construct($name, $typePage = 0, $postId = 0) //, $modelImg = false)
+    public function __construct($typePage = 0, $postId = 0) //, $modelImg = false)
 
     {
-
-        $this->name = $name;
 
         $this->typePage = $typePage;
 
         $this->postId = $postId;
 
         $this->user_id = auth()->id();
+
+        $this->cardCreate();
 
         // $this->modelImg = $modelImg?json_encode($modelImg):0;
     }
@@ -45,6 +46,17 @@ class UpImg extends Component
         return view('up-file::components.up-img');
 
     }
+
+    private function cardCreate()
+    {
+
+        $data = UploadImage::select('id', 'url', 'post_id', 'user_id')->where('type_page', $this->typePage)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
+
+        $data->tmpStyle = $this->postId ? '' : 'style = "opacity:0.5"';
+
+        $this->images = \View::make('up-file::components.up-img-card', ['images'=>$data]);
+    }
+
 }
 
 // php artisan make:model Image -mcr
