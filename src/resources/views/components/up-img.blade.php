@@ -73,7 +73,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Заголовок модального окна</h5>
-          <button type="button" class="btn-close"  aria-label="Закрыть" onclick="closeModalAlt()"></button>
+          <button type="button" class="btn-close"  aria-label="Закрыть" onclick="UpImg_obj.closeModalAlt()"></button>
         </div>
         <div class="modal-body">
           <p>Здесь идет основной текст модального окна</p>
@@ -82,8 +82,8 @@
           <input type="text" class="form-control" value="">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="closeModalAlt()">Закрыть</button>
-          <button type="button" class="btn btn-primary" onclick="saveModalAlt()">Сохранить изменения</button>
+          <button type="button" class="btn btn-secondary" onclick="UpImg_obj.closeModalAlt()">Закрыть</button>
+          <button type="button" class="btn btn-primary" onclick="UpImg_obj.saveModalAlt()">Сохранить изменения</button>
         </div>
       </div>
     </div>
@@ -95,27 +95,13 @@
 
   var UpImg_obj = {
 
-
-  names :'',
-    // typePage : {!! $typePage !!},
     divActiveImage : '',
     inputAlt : '',
-
-
-
-  //   eventInputFile(name){
-
-  //      inputFile = document.getElementById('js-file-'+name),
-
-  //     inputFile.onchange = function() {
-  // console.log('input');
-  //       sendFile(inputFile);
-  //   }
-  //   },
-
-    /*
-
-    */
+    /**
+     * [getImage description]
+     * @param  {[type]} typePage [description]
+     * @return {[type]}          [description]
+     */
     async getImage(typePage){
 
       console.log(typePage);
@@ -134,9 +120,11 @@
       });
 
     },
-    /*
-
-    */
+    /**
+     * [sendFile description]
+     * @param  {[type]} inputFile [description]
+     * @return {[type]}           [description]
+     */
     sendFile(inputFile){
 
       let typePage=inputFile.id;
@@ -158,62 +146,20 @@
       });
 
     },
-    sendAlt(alt){
-  // console.log(alt.value);
-
-      // divActiveImage = document.getElementById(id);
-      // inputAlt = divActiveImage.querySelector('.alt');
-      const formData = new FormData();
-
-      // formData.append('model_img', divActiveImage.dataset.modelImg);
-      formData.append('id', divActiveImage.id);
-      formData.append('alt', alt.value);
-
-
-      sendAjax('POST', '/add-image-alt', formData, function(msg){
-  // console.log(msg);
-        const data = JSON.parse(msg);
-
-      });
-
-    },
-    /*
-
+    /**
+     * [editAlt description]
+     * @param  {[type]} id [description]
+     * @return {[type]}    [description]
      */
-    addHiddenInput(divImg, id, url, alt='', post_id=0){
-  console.log(divImg);
-
-      let tmpStyle = post_id?'':'style = "opacity:0.5"';
-      let altValue = alt??'image-'+id;
-      let HtmlCode = `<div class="img-item" id="`+id+`">
-      <img src="`+url+`" `+tmpStyle+`onclick="editAlt(`+id+`);">
-              <a herf="#" class="img-delete" onclick="removeImg(`+id+`); return false;" title="Удалить изображение"></a>
-              <a herf="#" class="img-croping" onclick="imgCroping(`+id+`);" title="Сделать превью для картинки"></a>
-              <input type="hidden" value="`+altValue+`" id="alt`+id+`"class="alt">
-           </div>
-            `;
-  console.log(divImg);
-      divImg.insertAdjacentHTML( 'beforeend', HtmlCode );
-    },
-    /*
-
-   */
     editAlt(id){
 
       divActiveImage = document.getElementById(id);
       inputAlt = divActiveImage.querySelector('.alt');
-
-
       let modal = document.getElementById('alt-text');
       let modalDialog = modal.querySelector('.modal-dialog');
       let inputModal = modal.querySelector('input');
-
       inputModal.value = inputAlt.value;
-  // console.log(inputModal);
       var rect = divActiveImage.getBoundingClientRect();
-
-
-
       modal.style.display='block';
       inputModal.focus();
       modalDialog.style.top = rect.top-300+"px";
@@ -221,30 +167,37 @@
     },
     /*
 
-     */
+    */
     saveModalAlt(){
 
-          inputAlt = divActiveImage.querySelector('.alt');
-
-
-          let modal = document.getElementById('alt-text');
-          let inputModal = modal.querySelector('input');
-
-
-  // console.log(divActiveImage);
-
+      inputAlt = divActiveImage.querySelector('.alt');
+      let modal = document.getElementById('alt-text');
+      let inputModal = modal.querySelector('input');
 
       if(inputModal.value.length>0){
         inputAlt.value = inputModal.value;
-              sendAlt(inputModal);
-           inputModal  = '';
+        UpImg_obj.sendAlt(inputModal);
+        inputModal  = '';
       }
-
-      closeModalAlt();
+      UpImg_obj.closeModalAlt();
     },
-  /*
+    /*
 
-   */
+    */
+    sendAlt(alt){
+
+      const formData = new FormData();
+      formData.append('id', divActiveImage.id);
+      formData.append('alt', alt.value);
+
+      UpImg_obj.sendAjax('POST', '/add-image-alt', formData, function(msg){
+
+        const data = JSON.parse(msg);
+      });
+    },
+    /*
+
+    */
     closeModalAlt(){
 
       let modal = document.getElementById('alt-text');
@@ -253,22 +206,19 @@
 
       divActiveImage.style.border = "none";
     },
-
     /*
     Удаление загруженной картинки
     */
     removeImg(id){
 
       divActiveImage = document.getElementById(id);
-  // console.log(divActiveImage);
+
       const formData = new FormData();
-      // formData.append('model_img', divActiveImage.dataset.modelImg);
+
       formData.append('id', id);
 
+      UpImg_obj.sendAjax('POST', '/del-image', formData, function(msg){
 
-
-      sendAjax('POST', '/del-image', formData, function(msg){
-  // console.log(msg);
         const data = JSON.parse(msg);
 
         if(!data.error) {
@@ -276,10 +226,12 @@
         }
 
       });
-
     },
-
-
+    /**
+     * [createImageData description]
+     * @param  {[type]} inputFile [description]
+     * @return {[type]}           [description]
+     */
     createImageData(inputFile){
 
       const file = inputFile.files[0]; // получаем выбранный файл
