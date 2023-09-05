@@ -22,7 +22,6 @@ class UpImg extends Component
      * @return void
      */
     public function __construct($typePage = 0, $postId = 0) //, $modelImg = false)
-
     {
 
         $this->typePage = $typePage;
@@ -43,7 +42,7 @@ class UpImg extends Component
      */
     public function render()
     {
-        return view('up-file::components.up-img');
+        return view('up-file::components.up-img.up-img');
 
     }
 
@@ -54,7 +53,7 @@ class UpImg extends Component
 
         $data->tmpStyle = 'style = \"opacity:0.5\"';
 
-        $this->images = \View::make('up-file::components.up-img-card', ['images'=>$data]);
+        $this->images = \View::make('up-file::components.up-img.up-img-card', ['images'=>$data]);
     }
 
 }

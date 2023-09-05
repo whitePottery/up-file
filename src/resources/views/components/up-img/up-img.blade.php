@@ -2,7 +2,7 @@
 <div>
   <div class="form-row">
     <label>Изображения:</label>
-      <div class="img-list" id="js-file-list-{{ $typePage }}" >{!! $images??'' !!}</div>
+      <div class="img-list" id="js-file-list-{{ $typePage }}" data-type="{{ $typePage }}">{!! $images??'' !!}</div>
       <input id="{{ $typePage }}" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif" onchange="UpImg_obj.sendFile(this);">
   </div>
 </div>

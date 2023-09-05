@@ -100,6 +100,6 @@ class UploadImageController extends Controller
     private function cardCreate($image)
     {
 
-        return (string)\View::make('up-file::components.up-img-card', ['images' => [$image]]);
+        return (string)\View::make('up-file::components.up-img.up-img-card', ['images' => [$image]]);
     }
 }

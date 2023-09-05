@@ -43,6 +43,7 @@ class UpFileServiceProvider extends ServiceProvider
 
         $this->loadViewComponentsAs('upfile', [
             \UpFile\View\Components\UpImg::class,
+            \UpFile\View\Components\Cut::class,
             // Button::class,
         ]);
 
