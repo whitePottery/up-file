@@ -1,5 +1,6 @@
+{{-- сохранять в сессию или Redis --}}
     <div>
-        <img height="200" src="{{ old('image_src_'.$typePage)??'/images/no_photo.jpg'}}" id="img-croping-{{ $typePage }}" alt="{{ __('upfile.preview_image') }}">
+        <img height="200" src="{{ $image??'/images/no_photo.jpg'}}" id="img-croping-{{ $typePage }}" alt="{{ __('upfile.preview_image') }}">
         <input type="hidden" id="image_base64_{{ $typePage }}" name="image_base64[{{ $typePage }}]" value="">
 {{--         <input type="hidden" id="image_srs_{{ $typePage }}'" name="image_src_{{ $typePage }}" value=""> --}}
     </div>

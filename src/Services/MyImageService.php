@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace UpFile\Services;
 
 use Illuminate\Support\Facades\Storage;
 
-class MyImageService
+class MyImageService extends ImageResize
 {
 
     /**
