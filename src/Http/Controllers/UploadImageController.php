@@ -33,7 +33,7 @@ class UploadImageController extends Controller
             $constraint->aspectRatio();
         });
         $img->save(Storage::path($upImg->image));
-
+        //записываем изображение в хранилище
         $upImg->url = Storage::url($upImg->image);
 
         $upImg->user_id = $user_id;
@@ -99,22 +99,7 @@ class UploadImageController extends Controller
 
     private function cardCreate($image)
     {
-        $image->tmpStyle = $image->post_id ? '' : 'style = "opacity:0.5"';
 
         return (string)\View::make('up-file::components.up-img-card', ['images' => [$image]]);
     }
-
-    /*
-
-     */
-    // public function modelCheck($request)
-    // {
-
-    //     $model = $request->model_img
-    //     ? new $request->model_img
-    //     : new UploadImage;
-
-    //     return $model;
-    // }
-
 }

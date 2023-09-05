@@ -52,7 +52,7 @@ class UpImg extends Component
 
         $data = UploadImage::select('id', 'url', 'post_id', 'user_id')->where('type_page', $this->typePage)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
 
-        $data->tmpStyle = $this->postId ? '' : 'style = "opacity:0.5"';
+        $data->tmpStyle = 'style = \"opacity:0.5\"';
 
         $this->images = \View::make('up-file::components.up-img-card', ['images'=>$data]);
     }
