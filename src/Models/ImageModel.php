@@ -10,7 +10,7 @@ class ImageModel extends Model
 {
     use HasFactory;
 
-    public $typePage = 0;
+    public $name = 0;
 
     /**
      * [boot description]
@@ -54,7 +54,7 @@ class ImageModel extends Model
     public function destroyImages()
     {
 
-        $images = UploadImage::where('post_id', $this->id)->where('type_page', $this->typePage)->pluck('image', 'id')->toArray();
+        $images = UploadImage::where('post_id', $this->id)->where('name', $this->name)->pluck('image', 'id')->toArray();
 
         UploadImage::destroy(array_keys($images));
 
@@ -67,7 +67,7 @@ class ImageModel extends Model
      */
     public function getImages($limit=100)
     {
-        return UploadImage::where('post_id', $this->id)->where('type_page', $this->typePage)->offset(0)->limit($limit)->get();
+        return UploadImage::where('post_id', $this->id)->where('name', $this->name)->offset(0)->limit($limit)->get();
     }
 
     /**
@@ -76,7 +76,7 @@ class ImageModel extends Model
      */
     public function updateImage()
     {
-        return UploadImage::where('post_id', 0)->where('type_page', $this->typePage)->update(['post_id' => $this->id]);
+        return UploadImage::where('post_id', 0)->whereIn('name', $this->name)->update(['post_id' => $this->id]);
     }
 
 }

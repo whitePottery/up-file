@@ -21,7 +21,7 @@ class UpImg extends Component
      *
      * @return void
      */
-    public function __construct($name = 'upImage', $postId = 0) //, $modelImg = false)
+    public function __construct($name = 'upImage', $postId=0 ) //, $modelImg = false)
     {
 
         $this->name = $name;
@@ -49,10 +49,10 @@ class UpImg extends Component
     private function cardCreate()
     {
 
-        $data = UploadImage::select('id', 'url', 'post_id', 'user_id')->where('type_page', $this->name)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
+        $data = UploadImage::select('id', 'url', 'post_id', 'user_id')->where('name', $this->name)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
 
-        $data->tmpStyle = 'style = \"opacity:0.5\"';
-
+        // $data->tmpStyle = 'style = \"opacity:0.5\"';
+// dd($this->postId);
         $this->images = \View::make('up-file::components.up-img.up-img-card', ['images'=>$data]);
     }
 

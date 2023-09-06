@@ -17,8 +17,8 @@ class CreateUploadImagesTable extends Migration
             $table->id();
             $table->integer('user_id')->unsigned();
             $table->integer('post_id')->unsigned();
-            $table->string('type_page');
-            $table->string('image');
+            $table->string('name');
+            $table->string('path');
             $table->string('url');
             $table->string('alt')->nullable();
             $table->timestamps();

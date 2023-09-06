@@ -25,20 +25,20 @@ class UploadImageController extends Controller
 
         $upImg = new UploadImage;
 
-        $upImg->image = $request->file('image')->store('public/images');
+        $upImg->path = $request->file('image')->store('public/images');
 
         // Создаем миниатюру изображения и сохраняем ее
-        $img = Image::make(Storage::path($upImg->image));
+        $img = Image::make(Storage::path($upImg->path));
         $img->resize(null, 600, function ($constraint) {
             $constraint->aspectRatio();
         });
-        $img->save(Storage::path($upImg->image));
+        $img->save(Storage::path($upImg->path));
         //записываем изображение в хранилище
-        $upImg->url = Storage::url($upImg->image);
+        $upImg->url = Storage::url($upImg->path);
 
         $upImg->user_id = $user_id;
 
-        $upImg->type_page = $name;
+        $upImg->name = $name;
 
         $upImg->post_id = $postId;
 
@@ -53,9 +53,9 @@ class UploadImageController extends Controller
     {
 
         if (0 == $postId) {
-            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('type_page', $name)->where('post_id', $postId)->where('user_id', $user_id)->get();
+            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('name', $name)->where('post_id', $postId)->where('user_id', $user_id)->get();
         } else {
-            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('type_page', $name)->where('post_id', $postId)->get();
+            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('name', $name)->where('post_id', $postId)->get();
         }
 
         $responce = ['images' => $images];
@@ -99,7 +99,7 @@ class UploadImageController extends Controller
 
     private function cardCreate($image)
     {
-
+        $image->post_id=0;
         return (string)\View::make('up-file::components.up-img.up-img-card', ['images' => [$image]]);
     }
 }

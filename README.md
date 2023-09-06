@@ -19,3 +19,21 @@ php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
  ```
     php artisan migrate
  ```
+
+
+<x-upfile-cut name="image" :src="Storage::url($news->image)"/>
+<x-upfile-up-img name="image" :post-id="$news->id"/>
+
+
+
+  class News extends ImageModel
+{
+    use HasFactory;
+
+
+    const TYPE_PAGE = 1;
+    public $name = ['image11','image'];
+
+
+
+копировать миграции картинку

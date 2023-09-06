@@ -9,14 +9,16 @@ class Cut extends Component
 
 
         public $name;
+        public $src;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name="cut")
+    public function __construct($name="cut", $src='')
     {
         $this->name = $name;
+        $this->src = $src;
     }
 
     /**

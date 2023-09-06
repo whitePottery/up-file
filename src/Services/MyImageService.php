@@ -14,11 +14,12 @@ class MyImageService extends ImageResize
      * @param  [type] $path  [description]
      * @return [type]        [description]
      */
-    public function saveBase64($image, $path)
+    public static function saveBase64($image, $path)
     {
                 // dd($path);
         $image_parts    = explode(";base64,", $image);
         $image_type_aux = explode("image/", $image_parts[0]);
+    // dd($image_type_aux);
         $image_type     = $image_type_aux[1];
         $image_base64   = base64_decode($image_parts[1]);
         $file           = $path .'/'. uniqid() . '. ' . $image_type;
@@ -30,15 +31,16 @@ class MyImageService extends ImageResize
     /**
      * [cropStorage description]
      *
-     * @param  array $data [description]
+     * @param  array $image [description]
      * @param  string: $path [description]
      * @return string: $image :path file
      */
-    public function cropStorage($data, $path)
+    public static function cropStorage($image, $path)
     {
-        ! empty($data['image_base64'])
-        ? $image = $this->saveBase64($data['image_base64'], $path)
-        : $image = Storage::put($path, $data['image']);
+        $image = self::saveBase64($image, $path);
+        // ! empty($image)
+        // ? $image = $this->saveBase64($image, $path)
+        // : $image = Storage::put($path, $image['image']);
 
         return $image;
     }

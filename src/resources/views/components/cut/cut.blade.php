@@ -1,7 +1,8 @@
 {{-- сохранять в сессию или Redis --}}
     <div>
-        <img height="200" src="{{ $image??'/images/no_photo.jpg'}}" id="img-croping-{{ $name }}" alt="{{ __('upfile.preview_image') }}">
-        <input type="hidden" id="image_base64_{{ $name }}" name="image_base64[{{ $name }}]" value="">
+        <img height="200" src="{{ $src??'/images/no_photo.jpg'}}" id="img-croping-{{ $name }}" alt="{{ __('upfile.preview_image') }}">
+        <input type="hidden" id="{{ $name }}" name="{{ $name }}" value="">
+
 {{--         <input type="hidden" id="image_srs_{{ $name }}'" name="image_src_{{ $name }}" value=""> --}}
     </div>
 @once
@@ -47,7 +48,7 @@
 
             let name='';
 
-            $('input[name="image"]').attr("id", "image");
+            $('input[name="{{ $name }}"]').attr("id", "{{ $name }}");
 
             $.ajaxSetup({
                 headers: {
@@ -76,7 +77,7 @@
 
                     $('#img-croping-'+name).attr('src',resp);
 
-                    $('#image_base64_'+name).attr('value',resp);
+                    $('#'+name).attr('value',resp);
 
                     $('.modal').modal('hide');
 
