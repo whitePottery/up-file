@@ -10,7 +10,7 @@ class UpImg extends Component
 
     public $images;
 
-    public $typePage;
+    public $name;
 
     public $postId;
 
@@ -21,10 +21,10 @@ class UpImg extends Component
      *
      * @return void
      */
-    public function __construct($typePage = 0, $postId = 0) //, $modelImg = false)
+    public function __construct($name = 'upImage', $postId = 0) //, $modelImg = false)
     {
 
-        $this->typePage = $typePage;
+        $this->name = $name;
 
         $this->postId = $postId;
 
@@ -49,7 +49,7 @@ class UpImg extends Component
     private function cardCreate()
     {
 
-        $data = UploadImage::select('id', 'url', 'post_id', 'user_id')->where('type_page', $this->typePage)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
+        $data = UploadImage::select('id', 'url', 'post_id', 'user_id')->where('type_page', $this->name)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
 
         $data->tmpStyle = 'style = \"opacity:0.5\"';
 

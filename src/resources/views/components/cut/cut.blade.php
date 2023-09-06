@@ -1,8 +1,8 @@
 {{-- сохранять в сессию или Redis --}}
     <div>
-        <img height="200" src="{{ $image??'/images/no_photo.jpg'}}" id="img-croping-{{ $typePage }}" alt="{{ __('upfile.preview_image') }}">
-        <input type="hidden" id="image_base64_{{ $typePage }}" name="image_base64[{{ $typePage }}]" value="">
-{{--         <input type="hidden" id="image_srs_{{ $typePage }}'" name="image_src_{{ $typePage }}" value=""> --}}
+        <img height="200" src="{{ $image??'/images/no_photo.jpg'}}" id="img-croping-{{ $name }}" alt="{{ __('upfile.preview_image') }}">
+        <input type="hidden" id="image_base64_{{ $name }}" name="image_base64[{{ $name }}]" value="">
+{{--         <input type="hidden" id="image_srs_{{ $name }}'" name="image_src_{{ $name }}" value=""> --}}
     </div>
 @once
     <div>
@@ -45,7 +45,7 @@
 
         <script type="text/javascript">
 
-            let typePage='';
+            let name='';
 
             $('input[name="image"]').attr("id", "image");
 
@@ -74,13 +74,13 @@
                     size: 'viewport'
                 }).then(function(resp) {
 
-                    $('#img-croping-'+typePage).attr('src',resp);
+                    $('#img-croping-'+name).attr('src',resp);
 
-                    $('#image_base64_'+typePage).attr('value',resp);
+                    $('#image_base64_'+name).attr('value',resp);
 
                     $('.modal').modal('hide');
 
-                  // $('<input type="hidden" id="image_base64_'+typePage+'" name="image_base64['+typePage+']" value="'+resp+'">').appendTo('#form');
+                  // $('<input type="hidden" id="image_base64_'+name+'" name="image_base64['+name+']" value="'+resp+'">').appendTo('#form');
 
 
 
@@ -91,7 +91,7 @@
               $('.modal').modal('show');
 
                 divActiveImage = document.getElementById(id);
-                typePage = divActiveImage.closest('.img-list').dataset.type;
+                name = divActiveImage.closest('.img-list').dataset.type;
                 image = divActiveImage.querySelector('img');
                 // console.log(image.src);
                  $croppCrop.croppie('bind', {

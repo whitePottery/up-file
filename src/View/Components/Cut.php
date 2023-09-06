@@ -8,15 +8,15 @@ class Cut extends Component
 {
 
 
-        public $typePage;
+        public $name;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($typePage = 0)
+    public function __construct($name="cut")
     {
-        $this->typePage = $typePage;
+        $this->name = $name;
     }
 
     /**

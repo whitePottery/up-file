@@ -14,9 +14,9 @@ Image CRUD
  */
 // Route::group(['middleware' => ['auth']], function () {
 // Route::post('/add-image/{page}/{userId}/{postId?}', function(){return auth()->id();});
-Route::post('/add-image/{page}/{userId}/{postId?}', [\UpFile\Http\Controllers\UploadImageController::class, 'store'])->name('addImg');//->middleware('ajax');
+Route::post('/add-image/{name}/{userId}/{postId?}', [\UpFile\Http\Controllers\UploadImageController::class, 'store'])->name('addImg');//->middleware('ajax');
 // Route::post('/del-image/{id}', function(){return $_REQUEST;});
-Route::get('/get-image/{page}/{userId}/{postId?}', [\UpFile\Http\Controllers\UploadImageController::class, 'getImage'])->name('getImg');
+Route::get('/get-image/{name}/{userId}/{postId?}', [\UpFile\Http\Controllers\UploadImageController::class, 'getImage'])->name('getImg');
 
 Route::post('/del-image', [\UpFile\Http\Controllers\UploadImageController::class, 'delete'])->name('delImg');
 

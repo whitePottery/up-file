@@ -2,8 +2,8 @@
 <div>
   <div class="form-row">
     <label>Изображения:</label>
-      <div class="img-list" id="js-file-list-{{ $typePage }}" data-type="{{ $typePage }}">{!! $images??'' !!}</div>
-      <input id="{{ $typePage }}" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif" onchange="UpImg_obj.sendFile(this);">
+      <div class="img-list" id="js-file-list-{{ $name }}" data-type="{{ $name }}">{!! $images??'' !!}</div>
+      <input id="{{ $name }}" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif" onchange="UpImg_obj.sendFile(this);">
   </div>
 </div>
 
@@ -90,18 +90,18 @@
       inputAlt : '',
       /**
        * [getImage description]
-       * @param  {[type]} typePage [description]
+       * @param  {[type]} name [description]
        * @return {[type]}          [description]
        */
-      async getImage(typePage){
+      async getImage(name){
 
-        console.log(typePage);
-      await UpImg_obj.sendAjax('GET', '/get-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , '', function(msg){
+        console.log(name);
+      await UpImg_obj.sendAjax('GET', '/get-image/'+name+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , '', function(msg){
 
           const data = JSON.parse(msg);
 
           if(!data.error) {
-          let divImg = document.getElementById('js-file-list-'+typePage);
+          let divImg = document.getElementById('js-file-list-'+name);
             data.images.forEach( function(item, index, array) {
 
               UpImg_obj.addHiddenInput(divImg, item.id, item.url, item.alt, item.post_id)
@@ -118,9 +118,9 @@
        */
       sendFile(inputFile){
 
-        let typePage=inputFile.id;
+        let name=inputFile.id;
 
-        UpImg_obj.sendAjax('POST', '/add-image/'+typePage+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , UpImg_obj.createImageData(inputFile), function(msg){
+        UpImg_obj.sendAjax('POST', '/add-image/'+name+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , UpImg_obj.createImageData(inputFile), function(msg){
           // console.log(msg);
           const data = JSON.parse(msg);
 

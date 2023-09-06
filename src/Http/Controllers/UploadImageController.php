@@ -15,7 +15,7 @@ class UploadImageController extends Controller
         return __CLASS__;
     }
 
-    public function store(Request $request, $typePage, $user_id, $postId = 0)
+    public function store(Request $request, $name, $user_id, $postId = 0)
     {
 
         $validatedData = $request->validate([
@@ -38,7 +38,7 @@ class UploadImageController extends Controller
 
         $upImg->user_id = $user_id;
 
-        $upImg->type_page = $typePage;
+        $upImg->type_page = $name;
 
         $upImg->post_id = $postId;
 
@@ -49,13 +49,13 @@ class UploadImageController extends Controller
         return response()->json($responce);
     }
 
-    public function getImage(UploadImage $upImg, $typePage, $user_id, $postId = 0)
+    public function getImage(UploadImage $upImg, $name, $user_id, $postId = 0)
     {
 
         if (0 == $postId) {
-            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('type_page', $typePage)->where('post_id', $postId)->where('user_id', $user_id)->get();
+            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('type_page', $name)->where('post_id', $postId)->where('user_id', $user_id)->get();
         } else {
-            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('type_page', $typePage)->where('post_id', $postId)->get();
+            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('type_page', $name)->where('post_id', $postId)->get();
         }
 
         $responce = ['images' => $images];
