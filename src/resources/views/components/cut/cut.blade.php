@@ -1,9 +1,9 @@
 {{-- сохранять в сессию или Redis --}}
     <div>
-        <img height="200" src="{{ $src??'/images/no_photo.jpg'}}" id="img-croping-{{ $name }}" alt="{{ __('upfile.preview_image') }}">
-        <input type="hidden" id="{{ $name }}" name="{{ $name }}" value="">
+        <img height="200" src="{{ $src??'/images/no_photo.jpg'}}" id="img-croping-{{ $nameCut }}" alt="{{ __('upfile.preview_image') }}">
+        <input type="hidden" id="{{ $nameCut }}" name="{{ $nameCut }}" value="">
 
-{{--         <input type="hidden" id="image_srs_{{ $name }}'" name="image_src_{{ $name }}" value=""> --}}
+{{--         <input type="hidden" id="image_srs_{{ $nameCut }}'" name="image_src_{{ $nameCut }}" value=""> --}}
     </div>
 @once
     <div>
@@ -48,7 +48,7 @@
 
             let name='';
 
-            $('input[name="{{ $name }}"]').attr("id", "{{ $name }}");
+            $('input[name="{{ $nameCut }}"]').attr("id", "{{ $nameCut }}");
 
             $.ajaxSetup({
                 headers: {
@@ -94,7 +94,7 @@
                 divActiveImage = document.getElementById(id);
                 name = divActiveImage.closest('.img-list').dataset.type;
                 image = divActiveImage.querySelector('img');
-                // console.log(image.src);
+                // console.log(name);
                  $croppCrop.croppie('bind', {
                         url: image.src
                     }).then(function() {

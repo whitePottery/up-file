@@ -15,9 +15,9 @@ class UploadImageController extends Controller
         return __CLASS__;
     }
 
-    public function store(Request $request, $name, $user_id, $postId = 0)
+    public function store(Request $request, $nameImg, $nameModel,$user_id, $postId = 0)
     {
-
+// return response()->json($request->file);
         $validatedData = $request->validate([
             'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
 
@@ -38,9 +38,11 @@ class UploadImageController extends Controller
 
         $upImg->user_id = $user_id;
 
-        $upImg->name = $name;
+        $upImg->name_img = $nameImg;
 
         $upImg->post_id = $postId;
+
+        $upImg->name_model = $nameModel;
 
         $res = $upImg->save();
 
@@ -49,13 +51,13 @@ class UploadImageController extends Controller
         return response()->json($responce);
     }
 
-    public function getImage(UploadImage $upImg, $name, $user_id, $postId = 0)
+    public function getImage(UploadImage $upImg, $nameImg, $user_id, $postId = 0)
     {
 
         if (0 == $postId) {
-            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('name', $name)->where('post_id', $postId)->where('user_id', $user_id)->get();
+            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('name_img', $nameImg)->where('post_id', $postId)->where('user_id', $user_id)->get();
         } else {
-            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('name', $name)->where('post_id', $postId)->get();
+            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('name_img', $nameImg)->where('post_id', $postId)->get();
         }
 
         $responce = ['images' => $images];

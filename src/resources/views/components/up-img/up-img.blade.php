@@ -2,12 +2,13 @@
 <div>
   <div class="form-row">
     <label>Изображения:</label>
-      <div class="img-list" id="js-file-list-{{ $name }}" data-type="{{ $name }}">{!! $images??'' !!}</div>
-      <input id="{{ $name }}" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif" onchange="UpImg_obj.sendFile(this);">
+      <div class="img-list" id="js-file-list-{{ $nameImg }}" data-type="{{ $nameImg }}">{!! $images??'' !!}</div>
+      <input id="{{ $nameImg }}" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif" onchange="UpImg_obj.sendFile(this);">
   </div>
 </div>
 
 @once
+  {{-- <input type="hidden" name="nameModel" value="{{ $nameModel }}"> --}}
 {{-- блок модальное окно для изменения Alt изображения --}}
     <div class="modal-alt" tabindex="-1"  id="alt-text">
       <div class="modal-dialog">
@@ -88,29 +89,7 @@
 
       divActiveImage : '',
       inputAlt : '',
-      /**
-       * [getImage description]
-       * @param  {[type]} name [description]
-       * @return {[type]}          [description]
-       */
-      async getImage(name){
 
-        console.log(name);
-      await UpImg_obj.sendAjax('GET', '/get-image/'+name+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , '', function(msg){
-
-          const data = JSON.parse(msg);
-
-          if(!data.error) {
-          let divImg = document.getElementById('js-file-list-'+name);
-            data.images.forEach( function(item, index, array) {
-
-              UpImg_obj.addHiddenInput(divImg, item.id, item.url, item.alt, item.post_id)
-            });
-          }
-
-        });
-
-      },
       /**
        * [sendFile description]
        * @param  {[type]} inputFile [description]
@@ -118,9 +97,9 @@
        */
       sendFile(inputFile){
 
-        let name=inputFile.id;
+        let nameImg=inputFile.id;
 
-        UpImg_obj.sendAjax('POST', '/add-image/'+name+'/'+{{ $user_id }}+'/'+{!! $postId??'0' !!} , UpImg_obj.createImageData(inputFile), function(msg){
+        UpImg_obj.sendAjax('POST', '/add-image/'+nameImg+'/{{ $nameModel }}/'+{{ $user_id }}+'/'+{!! $postId??'0' !!}, UpImg_obj.createImageData(inputFile), function(msg){
           // console.log(msg);
           const data = JSON.parse(msg);
 
@@ -230,6 +209,7 @@
         const formData = new FormData(); // создаем объект FormData для передачи файла
 
         formData.append('image', file); // добавляем файл в объект FormData
+        // formData.append('data', ['data']); // добавляем данные в объект FormData
 
         return formData;
       },

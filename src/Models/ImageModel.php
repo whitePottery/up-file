@@ -2,9 +2,10 @@
 
 namespace UpFile\Models;
 
-use UpFile\Models\UploadImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Http\FormRequest;
+use UpFile\Models\UploadImage;
 
 class ImageModel extends Model
 {
@@ -22,7 +23,8 @@ class ImageModel extends Model
         // Автоматически добавляем id пользователя к модели перед записью в базу
         static::creating(function ($model) {
             $model->user_id = auth()->user()->id;
-
+// dd($model->table);
+//
         });
 
         static::created(function ($model) {
@@ -65,7 +67,7 @@ class ImageModel extends Model
      * [getImages description]
      * @return [type] [description]
      */
-    public function getImages($limit=100)
+    public function getImages($limit = 100)
     {
         return UploadImage::where('post_id', $this->id)->where('name', $this->name)->offset(0)->limit($limit)->get();
     }
@@ -76,7 +78,10 @@ class ImageModel extends Model
      */
     public function updateImage()
     {
-        return UploadImage::where('post_id', 0)->whereIn('name', $this->name)->update(['post_id' => $this->id]);
+        return UploadImage::where('post_id', 0)->where('name_model', $this->table)->update(['post_id' => $this->id]);
+
+
+
     }
 
 }

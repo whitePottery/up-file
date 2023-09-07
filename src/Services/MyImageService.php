@@ -37,6 +37,7 @@ class MyImageService extends ImageResize
      */
     public static function cropStorage($image, $path)
     {
+
         $image = self::saveBase64($image, $path);
         // ! empty($image)
         // ? $image = $this->saveBase64($image, $path)

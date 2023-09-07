@@ -8,7 +8,7 @@ class Cut extends Component
 {
 
 
-        public $name;
+        public $nameCut;
         public $src;
     /**
      * Create a new component instance.
@@ -17,7 +17,7 @@ class Cut extends Component
      */
     public function __construct($name="cut", $src='')
     {
-        $this->name = $name;
+        $this->nameCut = $name;
         $this->src = $src;
     }
 

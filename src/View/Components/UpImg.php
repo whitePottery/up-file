@@ -10,21 +10,27 @@ class UpImg extends Component
 
     public $images;
 
-    public $name;
+    public $nameImg;
+
+    public $nameModel;
 
     public $postId;
 
     public $user_id;
+
     // public $modelImg;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($name = 'upImage', $postId=0 ) //, $modelImg = false)
+    public function __construct($name = '1', $postId = 0) //, $modelImg = false)
+
     {
 
-        $this->name = $name;
+        $this->nameImg = explode('-', $name)[0];
+
+        $this->nameModel = explode('-', $name)[1]??die('в компоненте - "x-upfile-up-img" атрибут name должен иметь вид "name-model" ');//str_replace('.','_',\Request::route()->getName());
 
         $this->postId = $postId;
 
@@ -49,11 +55,11 @@ class UpImg extends Component
     private function cardCreate()
     {
 
-        $data = UploadImage::select('id', 'url', 'post_id', 'user_id')->where('name', $this->name)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
+        $data = UploadImage::select('id', 'url', 'post_id', 'user_id')->where('name_img', $this->nameImg)->where('name_model', $this->nameModel)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
 
         // $data->tmpStyle = 'style = \"opacity:0.5\"';
-// dd($this->postId);
-        $this->images = \View::make('up-file::components.up-img.up-img-card', ['images'=>$data]);
+        // dd($this->postId);
+        $this->images = \View::make('up-file::components.up-img.up-img-card', ['images' => $data]);
     }
 
 }

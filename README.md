@@ -26,6 +26,8 @@ php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
 
 
 
+
+
   class News extends ImageModel
 {
     use HasFactory;
@@ -37,3 +39,9 @@ php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
 
 
 копировать миграции картинку
+
+
+вставить @stack('css') и @stack('js_scripts')
+
+
+UpFile\Models\ImageModel;
