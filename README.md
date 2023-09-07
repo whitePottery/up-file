@@ -22,19 +22,16 @@ php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
 
 
 <x-upfile-cut name="image" :src="Storage::url($news->image)"/>
-<x-upfile-up-img name="image" :post-id="$news->id"/>
+<x-upfile-up-img name="image-blog" :post-id="$news->id"/>
 
 
 
 
-
+UpFile\Models\ImageModel;
   class News extends ImageModel
 {
     use HasFactory;
 
-
-    const TYPE_PAGE = 1;
-    public $name = ['image11','image'];
 
 
 
@@ -44,4 +41,6 @@ php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
 вставить @stack('css') и @stack('js_scripts')
 
 
-UpFile\Models\ImageModel;
+
+
+

@@ -4,14 +4,13 @@ namespace UpFile\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Http\FormRequest;
 use UpFile\Models\UploadImage;
 
 class ImageModel extends Model
 {
     use HasFactory;
 
-    public $name = 0;
+    // public $name = 0;
 
     /**
      * [boot description]
@@ -24,7 +23,7 @@ class ImageModel extends Model
         static::creating(function ($model) {
             $model->user_id = auth()->user()->id;
 // dd($model->table);
-//
+            //
         });
 
         static::created(function ($model) {
@@ -56,7 +55,7 @@ class ImageModel extends Model
     public function destroyImages()
     {
 
-        $images = UploadImage::where('post_id', $this->id)->where('name', $this->name)->pluck('image', 'id')->toArray();
+        $images = UploadImage::where('post_id', $this->id)->where('name_model', $this->table)->pluck('image', 'id')->toArray();
 
         UploadImage::destroy(array_keys($images));
 
@@ -67,9 +66,23 @@ class ImageModel extends Model
      * [getImages description]
      * @return [type] [description]
      */
-    public function getImages($limit = 100)
+    public function getImages($nameImg = '', $limit = 100)
     {
-        return UploadImage::where('post_id', $this->id)->where('name', $this->name)->offset(0)->limit($limit)->get();
+
+        return UploadImage::where('post_id', $this->id)
+            ->when($nameImg, function ($query, $nameImg) {
+                return $query->where('name_img', $nameImg);
+            })
+            ->where('name_model', $this->table)->offset(0)->limit($limit)->get();
+    }
+
+    /**
+     * [getImages description]
+     * @return [type] [description]
+     */
+    public function firstImage()
+    {
+        return UploadImage::where('post_id', $this->id)->where('name_model', $this->table)->first();
     }
 
     /**
@@ -79,8 +92,6 @@ class ImageModel extends Model
     public function updateImage()
     {
         return UploadImage::where('post_id', 0)->where('name_model', $this->table)->update(['post_id' => $this->id]);
-
-
 
     }
 
