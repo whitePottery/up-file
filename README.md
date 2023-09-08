@@ -29,16 +29,20 @@ php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
 
 UpFile\Models\ImageModel;
   class News extends ImageModel
-{
+
     use HasFactory;
-
-
-
 
 копировать миграции картинку
 
-
 вставить @stack('css') и @stack('js_scripts')
+
+
+скопировать миграции
+скопировать файл отсутствия картинки
+скопировать себе файлы query croppie css js в папки
+
+
+<x-upfile-print-img name="image-news" :post-id="$news->id" class="n-slider"/>
 
 
 

@@ -24,7 +24,7 @@ class UpImg extends Component
      *
      * @return void
      */
-    public function __construct($name = '1', $postId = 0) //, $modelImg = false)
+    public function __construct($name, $postId = 0) //, $modelImg = false)
 
     {
 
