@@ -22,8 +22,8 @@ php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
 
 
 <x-upfile-cut name="image" :src="Storage::url($news->image)"/>
-<x-upfile-up-img name="image-blog" :post-id="$news->id"/>
 
+<x-upfile-up-img name="image-blog" :post-id="$news->id"/>
 
 
 
@@ -46,5 +46,6 @@ UpFile\Models\ImageModel;
 
 
 
-
+передать данные ширины высоты cropic
+высота картинки
 

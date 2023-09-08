@@ -41,8 +41,8 @@ class PrintImg extends Component
      */
     public function render()
     {
-        return view('up-file::components.print-img.print-img');
-
+        // return view('up-file::components.print-img.print-img');
+        return view('vendor.print-img.print-img');
     }
 
     private function cardCreate()

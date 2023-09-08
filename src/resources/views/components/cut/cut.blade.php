@@ -80,11 +80,6 @@
                     $('#'+name).attr('value',resp);
 
                     $('.modal').modal('hide');
-
-                  // $('<input type="hidden" id="image_base64_'+name+'" name="image_base64['+name+']" value="'+resp+'">').appendTo('#form');
-
-
-
                 });
             });
 
