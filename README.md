@@ -34,7 +34,7 @@ UpFile\Models\ImageModel;
 
 копировать миграции картинку
 
-вставить @stack('css') и @stack('js_scripts')
+вставить @stack('styles') и @stack('js_scripts')
 
 
 скопировать миграции
@@ -47,5 +47,10 @@ UpFile\Models\ImageModel;
 
 
 передать данные ширины высоты cropic
+
+width="500" height="100"
+
 высота картинки
 
+
+class Image заменить своим

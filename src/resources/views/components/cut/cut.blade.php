@@ -35,11 +35,11 @@
             </div>
         </div>
     </div>
-    @push('css')
+    @push('styles')
         <link href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css" rel="stylesheet">
     @endpush
 
-    @push('js_scripts')
+    @push('scripts')
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.js"></script>
@@ -59,13 +59,13 @@
             $croppCrop = $('#image-crop').croppie({
                 enableExif: true,
                 viewport: {
-                    width: {{ $widthCropp??296 }},
-                    height: {{ $heightCropp??219 }},
+                    width: {{ $widthCut }},
+                    height: {{ $heightCut }},
                     {!! isset($type)?"type:'$type',":'' !!}
                 },
                 boundary: {
                     width: '95%',
-                    height: {{ ($heightCropp??250)+50 }},
+                    height: {{ ($heightCut)+50 }},
                 }
             });
 

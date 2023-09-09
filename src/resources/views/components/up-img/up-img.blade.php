@@ -31,7 +31,7 @@
       </div>
     </div>
 
-  @push('css')
+  @push('styles')
     <style>
     /* Стили для вывода превью */
     .img-item {
@@ -83,7 +83,7 @@
     </style>
   @endpush
 
-  @push('js_scripts')
+  @push('scripts')
     <script>
     const UpImg_obj = {
 
