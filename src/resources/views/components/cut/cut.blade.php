@@ -78,7 +78,7 @@
 
                 let divActiveImage = document.getElementById(id);
                 name = divActiveImage.closest('.img-list').dataset.type;
-                let image = divActiveImage.querySelector('img');
+                image = divActiveImage.querySelector('img');
 
                 $croppCrop[name]= setObjectCrop();
 
@@ -94,7 +94,9 @@
 
             function setObjectCrop(){
 
-                if($croppCrop.hasOwnProperty(name)) return;
+                if($croppCrop.hasOwnProperty(name)) {
+                    return $croppCrop[name];
+                }
 
                 let stock = $('#data-'+name);
 

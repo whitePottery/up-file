@@ -20,8 +20,9 @@ php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
     php artisan migrate
  ```
 
+<x-upfile-cut name="image" width="300" height="100"/>
+<x-upfile-cut name="image" :src="Storage::url($news->image)" width="300" height="100"/>
 
-<x-upfile-cut name="image" :src="Storage::url($news->image)"/>
 
 <x-upfile-up-img name="image-blog" :post-id="$news->id"/>
 
