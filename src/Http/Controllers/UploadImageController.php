@@ -6,47 +6,40 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use UpFile\Models\UploadImage;
+use UpFile\Services\MyImageService;
 
 class UploadImageController extends Controller
 {
 
-    public function test()
+    public function store(Request $request)
     {
-        return __CLASS__;
-    }
 
-    public function store(Request $request, $nameImg, $nameModel,$user_id, $postId = 0)
-    {
-// return response()->json($request->file);
-        $validatedData = $request->validate([
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+// return response()->json($request);
+        // $validatedData = $request->validate([
+        //     'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
 
-        ]);
+        $data = json_decode($request->data);
 
         $upImg = new UploadImage;
-
-        $upImg->path = $request->file('image')->store('public/images');
-
-        // Создаем миниатюру изображения и сохраняем ее
-        $img = Image::make(Storage::path($upImg->path));
-        $img->resize(null, 600, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-        $img->save(Storage::path($upImg->path));
+return response()->json($data->property);
+        if(isset($data->property->image))
+           $upImg->path =  MyImageService::cropProperty($data->property, 'public/images');
+        else{
         //записываем изображение в хранилище
+        $upImg->path = $request->file('image')->store('public/images');
+        // меняем размер изображения
+        $this->resizeImg($data->property, $upImg->path);
+        }
+        //получаем урл изображения
         $upImg->url = Storage::url($upImg->path);
 
-        $upImg->user_id = $user_id;
-
-        $upImg->name_img = $nameImg;
-
-        $upImg->post_id = $postId;
-
-        $upImg->name_model = $nameModel;
+        foreach ($data->table as $key => $value) {
+            $upImg->$key = $value;
+        }
 
         $res = $upImg->save();
 
-        $responce = ['image'=>$this->cardCreate($upImg)];;
+        $responce = ['image' => $this->cardCreate($upImg)];
 
         return response()->json($responce);
     }
@@ -101,7 +94,27 @@ class UploadImageController extends Controller
 
     private function cardCreate($image)
     {
-        $image->post_id=0;
-        return (string)\View::make('up-file::components.up-img.up-img-card', ['images' => [$image]]);
+        $image->post_id = 0;
+        return (string) \View::make('up-file::components.up-img.up-img-card', ['images' => [$image]]);
     }
+
+    public function resizeImg($property, $path)
+    {
+
+        $img = Image::make(Storage::path($path));
+
+        if ($property->heightImg > 0) {
+            $img->resize(null, $property->heightImg, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        } elseif ($property->widthImg > 0) {
+            $img->resize($property->widthImg, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        }
+
+        $img->save(Storage::path($path));
+
+    }
+
 }

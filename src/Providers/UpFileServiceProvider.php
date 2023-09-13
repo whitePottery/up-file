@@ -45,6 +45,7 @@ class UpFileServiceProvider extends ServiceProvider
             \UpFile\View\Components\UpImg::class,
             \UpFile\View\Components\Cut::class,
             \UpFile\View\Components\PrintImg::class,
+            \UpFile\View\Components\CutImg::class,
             // Button::class,
         ]);
 

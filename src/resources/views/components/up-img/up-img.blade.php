@@ -1,11 +1,14 @@
 {{-- Секция вывода изображений и кнопки добавления изображений  --}}
 <div>
+  <x-upfile-cut-img name="{{ $nameImg }}" width="{{ $widthCut }}" height="{{ $heightCut }}"/>
   <div class="form-row">
     <label>Изображения:</label>
       <div class="img-list" id="js-file-list-{{ $nameImg }}" data-type="{{ $nameImg }}">{!! $images??'' !!}</div>
       <input id="{{ $nameImg }}" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif" onchange="UpImg_obj.sendFile(this);">
   </div>
 </div>
+
+
 
 @once
   {{-- <input type="hidden" name="nameModel" value="{{ $nameModel }}"> --}}
@@ -99,22 +102,37 @@
 
         let nameImg=inputFile.id;
 
-        UpImg_obj.sendAjax('POST', '/add-image/'+nameImg+'/{{ $nameModel }}/'+{{ $user_id }}+'/'+{!! $postId??'0' !!}, UpImg_obj.createImageData(inputFile), function(msg){
-          // console.log(msg);
-          const data = JSON.parse(msg);
+        let data = JSON.stringify({
+          table:
+          {
+            name_img: nameImg,
+            name_model: '{{ $nameModel }}',
+            user_id: '{{ $user_id }}',
+            post_id: '{!! $postId??'0' !!}',
+          },
+          property:{
+            widthImg:  {{ $widthImg }},
+            heightImg: {{ $heightImg }},
 
-          if(!data.error) {
-
-            let divImg = document.getElementById('js-file-list-'+inputFile.id);
-
-            divImg.insertAdjacentHTML( 'beforeend', data.image );
-
-            inputFile.value = '';
-
-          } else { alert(data.error); }
-
+           },
         });
 
+        UpImg_obj.sendAjax(
+          'POST', '/add-image',
+          UpImg_obj.createImageData(inputFile,data),
+          function(msg){
+          // console.log(msg);
+            const data = JSON.parse(msg);
+            if(!data.error) {
+
+              let divImg = document.getElementById('js-file-list-'+inputFile.id);
+
+              divImg.insertAdjacentHTML( 'beforeend', data.image );
+
+              inputFile.value = '';
+
+            } else { alert(data.error); }
+        });
       },
       /**
        * [editAlt description]
@@ -202,14 +220,14 @@
        * @param  {[type]} inputFile [description]
        * @return {[type]}           [description]
        */
-      createImageData(inputFile){
+      createImageData(inputFile, data){
 
         const file = inputFile.files[0]; // получаем выбранный файл
 
         const formData = new FormData(); // создаем объект FormData для передачи файла
 
         formData.append('image', file); // добавляем файл в объект FormData
-        // formData.append('data', ['data']); // добавляем данные в объект FormData
+        formData.append('data', data); // добавляем данные в объект FormData
 
         return formData;
       },

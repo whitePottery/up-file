@@ -42,4 +42,11 @@ class MyImageService extends ImageResize
 
     }
 
+     public static function cropProperty($property, $path)
+    {
+
+        // return self::saveBase64($image, $path);
+
+    }
+
 }
