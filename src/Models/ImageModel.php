@@ -55,7 +55,7 @@ class ImageModel extends Model
     public function destroyImages()
     {
 
-        $images = UploadImage::where('post_id', $this->id)->where('name_model', $this->table)->pluck('image', 'id')->toArray();
+        $images = UploadImage::where('post_id', $this->id)->where('name_model', 'LIKE', '%-'.$this->table)->pluck('image', 'id')->toArray();
 
         UploadImage::destroy(array_keys($images));
 

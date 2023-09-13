@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use UpFile\Models\UploadImage;
-use UpFile\Services\MyImageService;
 
 class UploadImageController extends Controller
 {
+
+    public static $path_img = 'public/images';
 
     public function store(Request $request)
     {
@@ -21,17 +22,20 @@ class UploadImageController extends Controller
         $data = json_decode($request->data);
 
         $upImg = new UploadImage;
-return response()->json($data->property);
-        if(isset($data->property->image))
-           $upImg->path =  MyImageService::cropProperty($data->property, 'public/images');
-        else{
+// return response()->json($data->property);
+        // if(isset($data->property->image))
+        //    $upImg->path =  MyImageService::cropProperty($data->property, 'public/images');
+        // else{
+        // $path_img='public/images';
         //записываем изображение в хранилище
-        $upImg->path = $request->file('image')->store('public/images');
+        $fileImg         = $request->file('image')->store('public/images');
+        $upImg->name_img = basename($fileImg);
+// return response()->json($upImg->path_img);
         // меняем размер изображения
-        $this->resizeImg($data->property, $upImg->path);
-        }
+        $this->resizeImg($data->property, $fileImg);
+        // }
         //получаем урл изображения
-        $upImg->url = Storage::url($upImg->path);
+        $upImg->url_img = Storage::url($fileImg);
 
         foreach ($data->table as $key => $value) {
             $upImg->$key = $value;
@@ -68,13 +72,22 @@ return response()->json($data->property);
         // return ($modelImage);
         $image = UploadImage::find($request->id);
 // return($image);
-        $msq = Storage::delete($image->image);
+        $msq = Storage::delete(self::$path_img . '/' . $image->name_img);
 
         $images = $image->delete();
 
         $responce = ['message' => 'Image deleted'];
 
         return response()->json($responce);
+    }
+    /**
+     * [saveCutFile description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function saveCutFile(Request $request)
+    {
+        return response()->json($request);
     }
 
 /*
@@ -95,7 +108,7 @@ return response()->json($data->property);
     private function cardCreate($image)
     {
         $image->post_id = 0;
-        return (string) \View::make('up-file::components.up-img.up-img-card', ['images' => [$image]]);
+        return (string) \View::make('up-file::components.cut-img.cut-img-card', ['images' => [$image]]);
     }
 
     public function resizeImg($property, $path)
