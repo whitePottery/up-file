@@ -53,6 +53,8 @@ class UpFileServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/up-file.php');
 
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'upfile');
+
         foreach ($copyList as $key => $pathTo) {
 
             $pathFrom = $pathPackege . 'copy/' . $key;
