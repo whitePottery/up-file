@@ -82,7 +82,7 @@ class ImageModel extends Model
      */
     public function firstImage()
     {
-        return UploadImage::where('post_id', $this->id)->where('name_model', $this->table)->first();
+        return UploadImage::where('post_id', $this->id)->where('name_model', 'LIKE', '%-'.$this->table)->first();
     }
 
     /**
@@ -91,7 +91,7 @@ class ImageModel extends Model
      */
     public function updateImage()
     {
-        return UploadImage::where('post_id', 0)->where('name_model', $this->table)->update(['post_id' => $this->id]);
+        return UploadImage::where('post_id', 0)->where('name_model', 'LIKE', '%-'.$this->table)->update(['post_id' => $this->id]);
 
     }
 
