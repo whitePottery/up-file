@@ -75,14 +75,3 @@ class CutImg extends Component
     }
 
 }
-
-// php artisan make:model Image -mcr
-
-//     $table->id();
-//     $table->integer('user_id')->unsigned();
-//     $table->integer('post_id')->unsigned();
-//     $table->string('type_page');
-//     $table->string('image');
-//     $table->string('url');
-//     $table->string('alt')->nullable();
-//     $table->timestamps();

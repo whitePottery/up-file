@@ -50,11 +50,11 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Заголовок модального окна</h5>
+            <h5 class="modal-title">Текст Alt</h5>
             <button type="button" class="btn-close"  aria-label="Закрыть" onclick="UpImg_obj.closeModalAlt()"></button>
           </div>
           <div class="modal-body">
-            <p>Здесь идет основной текст модального окна</p>
+            <p>Введите текст для тега Alt изображения</p>
           </div>
           <div class="modal-body">
             <input type="text" class="form-control" value="">
