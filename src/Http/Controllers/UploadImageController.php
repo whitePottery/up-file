@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use UpFile\Models\UploadImage;
+use UpFile\Services\MyImageService;
 
 class UploadImageController extends Controller
 {
 
     public static $path_img = 'public/images';
+    public static $path_mini= 'cut';
 
     public function store(Request $request)
     {
@@ -28,14 +30,14 @@ class UploadImageController extends Controller
         // else{
         // $path_img='public/images';
         //записываем изображение в хранилище
-        $fileImg         = $request->file('image')->store('public/images');
+        $fileImg         = $request->file('image')->store(self::$path_img);
         $upImg->name_img = basename($fileImg);
 // return response()->json($upImg->path_img);
         // меняем размер изображения
         $this->resizeImg($data->property, $fileImg);
         // }
         //получаем урл изображения
-        $upImg->url_img = Storage::url($fileImg);
+        $upImg->url_img = Storage::url(self::$path_img);
 
         foreach ($data->table as $key => $value) {
             $upImg->$key = $value;
@@ -73,21 +75,41 @@ class UploadImageController extends Controller
         $image = UploadImage::find($request->id);
 // return($image);
         $msq = Storage::delete(self::$path_img . '/' . $image->name_img);
-
+        $msq = Storage::delete(self::$path_img . '/' .self::$path_mini. '/' .$image->name_img);
         $images = $image->delete();
 
         $responce = ['message' => 'Image deleted'];
 
         return response()->json($responce);
     }
+
     /**
      * [saveCutFile description]
      * @param  Request $request [description]
      * @return [type]           [description]
      */
-    public function saveCutFile(Request $request)
+    public function saveCutFile(Request $request, $id)
     {
-        return response()->json($request);
+
+
+        $path = self::$path_img .'/'. self::$path_mini;
+
+        $data = json_decode($request->data);
+
+        $newFile = $path . '/' .basename($data->property->url);
+
+
+
+        $file = MyImageService::cropStorage($data->property->image, $path);
+        // return response()->json($id);
+        if(Storage::exists($newFile)) Storage::delete($newFile);
+
+        Storage::move($file, $newFile);
+
+        UploadImage::where('id',$id)->update(['path_mini'=>self::$path_mini]);
+        // $image->save();
+
+        return response()->json(Storage::url($newFile));
     }
 
 /*

@@ -22,7 +22,7 @@ Route::post('/del-image', [\UpFile\Http\Controllers\UploadImageController::class
 
 Route::post('/add-image-alt', [\UpFile\Http\Controllers\UploadImageController::class, 'imageAlt'])->name('addImgAlt');
 
-Route::post('/add-cut', [\UpFile\Http\Controllers\UploadImageController::class, 'saveCutFile'])->name('addImg');//->middleware('ajax');
+Route::post('/add-cut/{id}', [\UpFile\Http\Controllers\UploadImageController::class, 'saveCutFile'])->name('addImg');//->middleware('ajax');
 
 
 // });

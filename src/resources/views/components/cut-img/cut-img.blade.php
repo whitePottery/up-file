@@ -4,8 +4,7 @@
         <input type="hidden" id="{{ $nameModel }}" name="{{ $nameModel }}" value="">
         </div>
     </div> --}}
-    <div id="coord-live"></div>
-    <div id="data-{{ $nameModel }}" data-width="{{ $widthCut }}" data-height="{{ $heightCut }}">
+    <div id="data-{{ $nameModel }}" data-width-cut="{{ $widthCut }}" data-height-cut="{{ $heightCut }}" data-width-img="{{ $widthImg }}" data-height-img="{{ $heightImg }}">
       <div class="form-row">
         <label>Изображения:</label>
           <div class="img-list" id="js-file-list-{{ $nameModel }}" data-type="{{ $nameModel }}">{!! $images??'' !!}</div>
@@ -96,7 +95,7 @@
     }
     .img-item .img-croping {
       display: inline-block;
-      background: url(/cropping.png) 0 0 no-repeat;
+
       position: absolute;
       top: -5px;
       left: -9px;
@@ -104,6 +103,13 @@
       height: 40px;
       cursor: pointer;
     }
+    .img-item .img-black {
+      background: url(/cropping.png) 0 0 no-repeat;
+    }
+    .img-item .img-green {
+      background: url(/cropping_green.png) 0 0 no-repeat;
+    }
+
     .modal-alt{
         position: fixed;
         top: 0;
@@ -124,6 +130,7 @@
       position: absolute;
       max-width: 300px;
       max-height: 300px;
+      z-index: 99;
     }
     </style>
     @endpush
@@ -147,7 +154,10 @@
       sendFile(inputFile){
 
         let nameModel=inputFile.id;
-// console.log(nameModel);
+        let stock = document.getElementById('data-'+nameModel);
+
+
+// console.log(stock);
         let data = JSON.stringify({
           table:
           {
@@ -157,8 +167,8 @@
             post_id: '{!! $postId??'0' !!}',
           },
           property:{
-            widthImg:  {{ $widthImg }},
-            heightImg: {{ $heightImg }},
+            widthImg:  stock.dataset.widthImg,
+            heightImg: stock.dataset.heightImg,
 
            },
         });
@@ -362,48 +372,48 @@
                     return $croppCrop[name];
                 }
 
-                let stock = $('#data-'+name);
+                let stock = document.getElementById('data-'+name);
 
                 return $('#image-crop-'+name).croppie({
                     enableExif: true,
                     viewport: {
-                        width: stock.data("width"),
-                        height: stock.data("height"),
+                        width: stock.dataset.widthCut,
+                        height: stock.dataset.heightCut,
 
                         {!! isset($type)?"type:'$type',":'' !!}
                     },
                     boundary: {
                         width: '95%',
-                        height: stock.data("height")+50 ,
+                        height: 50+Number(stock.dataset.heightCut),
                     }
                 });
             }
 
             function sendCutFile(resp){
 
-
+                let stock = document.getElementById('data-'+name);
 
                 let data = JSON.stringify({
+                  id:3,
                   table:
                   {
-                    name_img: name,
-                    name_model: '{{ $nameModel??'test' }}',
-                    user_id: '{{ $user_id??1 }}',
+                    name_model: name,
+                    user_id: '{{ $user_id }}',
                     post_id: '{!! $postId??'0' !!}',
                   },
                   property:{
-                    widthImg:  {{ $widthImg??200 }},
-                    heightImg: {{ $heightImg??100 }},
+                    widthCut:  stock.dataset.widthCut,
+                    heightCut: stock.dataset.heightCut,
                     url:image.src,
                     image: resp,
                    },
                 });
 
                 UpImg_obj.sendAjax(
-                  'POST', '/add-cut',
+                  'POST', '/add-cut/'+divActiveImage.dataset.id,
                   createCutData(data),
                   function(msg){
-                  // console.log(msg);
+                  console.log(msg);
                     const data = JSON.parse(msg);
                     if(!data.error) {
 
@@ -415,12 +425,10 @@
                   divActiveImage.insertAdjacentHTML( 'beforeend',
                         '<img id="cut_'+id+'" class="cut-img-hidden" src="'+resp+'">' );
 
-                      // let divImg = document.getElementById('js-file-list-'+name);
+                  $('#img_'+id).find('.img-croping').css('background-image','url(/cropping_green1.png)')
 
-                      // divImg.insertAdjacentHTML( 'beforeend', data.image );
-// image.src = resp;
 
-//$('#img-croping-'+nameModal).attr('src',resp);
+
 
 
                     } else { alert(data.error); }
@@ -439,31 +447,24 @@
 
             function viewCutImage(id){
 
-                divActiveImage = document.getElementById(id);;
+                // divActiveImage = document.getElementById(id);
                 // image = divActiveImage.querySelector('img');
-                id_cut = divActiveImage.dataset.id;
+                // id_cut = divActiveImage.dataset.id;
+$elem = $('#img_'+id).find('.img-croping');
 
-
-                $('#'+id).find('.img-croping').mousemove(function(e){
-                   $('#cut_'+id_cut).css('display','block');
+                $elem.mousemove(function(e){
+                   $('#cut_'+id).css('display','block');
                   var target = this.getBoundingClientRect();
                   var x = e.clientX - target.left+5;
                   var y = e.clientY - target.top+5;
-                  $('#coord-live').html(x + ', ' + y);
-                   $('#cut_'+id_cut).css({'left':x, 'top':y})
+
+                   $('#cut_'+id).css({'left':x, 'top':y})
                 });
-$('#cut_'+id_cut).css('display','none');
 
-//               $('#'+id).find('img:first-child').mousemove(function(e){
+      $elem.mouseout(function(e){
+        $('#cut_'+id).css('display','none');
+      });
 
-//               $('#cut_'+id_cut).css('display','block');
-
-//                   var pos=$(this).position();
-// console.log(e.pageX);
-//                   $('#cut_'+id_cut).css({'left':e.pageX})
-//                   // $('#xCoord').val(e.pageX-pos.left);
-//                   // $('#yCoord').val(e.pageY-pos.top);
-//               });
 
 
             }

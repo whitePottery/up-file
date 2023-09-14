@@ -67,7 +67,7 @@ class CutImg extends Component
     private function cardCreate()
     {
 
-        $data = UploadImage::select('id', 'url_img', 'post_id', 'user_id')->where('name_model', $this->nameModel)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
+        $data = UploadImage::select('id', 'url_img', 'path_mini', 'name_img', 'post_id', 'user_id')->where('name_model', $this->nameModel)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
 
         // $data->tmpStyle = 'style = \"opacity:0.5\"';
         // dd($this->postId);
