@@ -4,8 +4,8 @@ namespace UpFile\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 use UpFile\Models\UploadImage;
+use UpFile\Services\ImageResize;
 use UpFile\Services\MyImageService;
 
 class UploadImageController extends Controller
@@ -96,13 +96,19 @@ class UploadImageController extends Controller
 
         $data = json_decode($request->data);
 
-        $newFile = $path . '/' .basename($data->property->url);
+        $newFile = $path . '/' .pathinfo($data->property->url, PATHINFO_FILENAME);
+
+        $nameExt = pathinfo($data->property->url, PATHINFO_EXTENSION);
+        // $newFile = $path . '/' .basename($data->property->url);
 
 
 
         $file = MyImageService::cropStorage($data->property->image, $path);
-        // return response()->json($id);
-        if(Storage::exists($newFile)) Storage::delete($newFile);
+        return response()->json($id);
+        if(Storage::exists($newFile)) {
+            // return $newFile;
+// return response()->json($newFile);
+            Storage::delete($newFile);}
 
         Storage::move($file, $newFile);
 
@@ -132,24 +138,66 @@ class UploadImageController extends Controller
         $image->post_id = 0;
         return (string) \View::make('up-file::components.cut-img.cut-img-card', ['images' => [$image]]);
     }
-
+    /**
+     * [resizeImg description]
+     * @param  [type] $property [description]
+     * @param  [type] $path     [description]
+     * @return [type]           [description]
+     */
     public function resizeImg($property, $path)
     {
 
-        $img = Image::make(Storage::path($path));
+        $image = ImageResize::make(Storage::path($path));
 
         if ($property->heightImg > 0) {
-            $img->resize(null, $property->heightImg, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+
+            $image->resizeToHeight($property->heightImg);
+
         } elseif ($property->widthImg > 0) {
-            $img->resize($property->widthImg, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
+
+            $image->resizeToWidth($property->widthImg);
         }
 
-        $img->save(Storage::path($path));
+        $image->save(Storage::path($path));
 
     }
+
+//     /*
+// --------------------------------------------------------------
+//  Изменение размера изображения
+// --------------------------------------------------------------
+//  */function img_resize ($file_in,$file_out,$h_size,$w_size=0){
+//     $image = new img_resize;
+// //echo $file_in;
+//     $image->load(Storage::path($path));
+//     if(0!=$w_size)
+//       $image->resize($w_size,$h_size);
+//     elseif('w'==$w_size)
+//       $image->resizeToWidth($h_size);
+//     else
+//       $image->resizeToHeight($h_size);
+//     $image->save($file_out,$this->extype);
+
+// return true;
+// }
+
+    // public function resizeImg($property, $path)
+    // {
+
+    //     $img = Image::make(Storage::path($path));
+
+    //     if ($property->heightImg > 0) {
+    //         $img->resize(null, $property->heightImg, function ($constraint) {
+    //             $constraint->aspectRatio();
+    //         });
+    //     } elseif ($property->widthImg > 0) {
+    //         $img->resize($property->widthImg, null, function ($constraint) {
+    //             $constraint->aspectRatio();
+    //         });
+    //     }
+
+    //     $img->save(Storage::path($path));
+
+    // }
 
 }
