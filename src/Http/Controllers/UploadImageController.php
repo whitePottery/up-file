@@ -162,42 +162,5 @@ class UploadImageController extends Controller
 
     }
 
-//     /*
-// --------------------------------------------------------------
-//  Изменение размера изображения
-// --------------------------------------------------------------
-//  */function img_resize ($file_in,$file_out,$h_size,$w_size=0){
-//     $image = new img_resize;
-// //echo $file_in;
-//     $image->load(Storage::path($path));
-//     if(0!=$w_size)
-//       $image->resize($w_size,$h_size);
-//     elseif('w'==$w_size)
-//       $image->resizeToWidth($h_size);
-//     else
-//       $image->resizeToHeight($h_size);
-//     $image->save($file_out,$this->extype);
-
-// return true;
-// }
-
-    // public function resizeImg($property, $path)
-    // {
-
-    //     $img = Image::make(Storage::path($path));
-
-    //     if ($property->heightImg > 0) {
-    //         $img->resize(null, $property->heightImg, function ($constraint) {
-    //             $constraint->aspectRatio();
-    //         });
-    //     } elseif ($property->widthImg > 0) {
-    //         $img->resize($property->widthImg, null, function ($constraint) {
-    //             $constraint->aspectRatio();
-    //         });
-    //     }
-
-    //     $img->save(Storage::path($path));
-
-    // }
 
 }
