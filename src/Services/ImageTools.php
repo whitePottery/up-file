@@ -1,13 +1,13 @@
 <?php
 namespace UpFile\Services;
 
-class ImageResize {
+class ImageTools {
 
    var $image;
    var $image_type;
 
    public static function make($filename) {
-      $img = new ImageResize;
+      $img = new ImageTools;
       $img->load($filename);
       return $img;
    }
@@ -23,7 +23,9 @@ class ImageResize {
          $this->image = imagecreatefrompng($filename);
       }
    }
-   public function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {//echo $image_type;
+   public function save($filename, $image_type=null, $compression=75, $permissions=null) {//echo $image_type;
+      if(!$image_type)
+         $image_type=$this->image_type;
       if(is_file($filename)) unlink($filename);
       if( $image_type == IMAGETYPE_JPEG ) {
          imagejpeg($this->image,$filename,$compression);

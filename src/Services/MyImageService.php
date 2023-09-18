@@ -4,9 +4,8 @@ namespace UpFile\Services;
 
 use Illuminate\Support\Facades\Storage;
 
-class MyImageService extends ImageResize
+class MyImageService
 {
-
     /**
      * [saveBase64 description]
      *
@@ -22,7 +21,9 @@ class MyImageService extends ImageResize
         // dd($image_type_aux);
         $image_type   = $image_type_aux[1];
         $image_base64 = base64_decode($image_parts[1]);
-        $file         = $path . '/' . uniqid() . '. ' . $image_type;
+        $file         = $path . '/' . uniqid() . '.' . $image_type;
+
+
         Storage::put($file, $image_base64);
 
         return $file;
@@ -39,6 +40,7 @@ class MyImageService extends ImageResize
     {
 
         return self::saveBase64($image, $path);
+
 
     }
 

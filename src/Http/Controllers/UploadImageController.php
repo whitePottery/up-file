@@ -5,14 +5,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use UpFile\Models\UploadImage;
-use UpFile\Services\ImageResize;
+use UpFile\Services\ImageTools;
 use UpFile\Services\MyImageService;
 
 class UploadImageController extends Controller
 {
 
-    public static $path_img = 'public/images';
-    public static $path_mini= 'cut';
+    public static $path_img  = 'public/images';
+    public static $path_mini = 'cut';
 
     public function store(Request $request)
     {
@@ -31,10 +31,14 @@ class UploadImageController extends Controller
         // $path_img='public/images';
         //записываем изображение в хранилище
         $fileImg         = $request->file('image')->store(self::$path_img);
-        $upImg->name_img = basename($fileImg);
+
+        // $upImg->name_img = pathinfo($fileImg, PATHINFO_BASENAME);
 // return response()->json($upImg->path_img);
         // меняем размер изображения
         $this->resizeImg($data->property, $fileImg);
+
+
+        $upImg->name_img =  pathinfo($fileImg, PATHINFO_BASENAME);
         // }
         //получаем урл изображения
         $upImg->url_img = Storage::url(self::$path_img);
@@ -74,8 +78,8 @@ class UploadImageController extends Controller
         // return ($modelImage);
         $image = UploadImage::find($request->id);
 // return($image);
-        $msq = Storage::delete(self::$path_img . '/' . $image->name_img);
-        $msq = Storage::delete(self::$path_img . '/' .self::$path_mini. '/' .$image->name_img);
+        $msq    = Storage::delete(self::$path_img . '/' . $image->name_img);
+        $msq    = Storage::delete(self::$path_img . '/' . self::$path_mini . '/' . $image->name_img);
         $images = $image->delete();
 
         $responce = ['message' => 'Image deleted'];
@@ -91,28 +95,19 @@ class UploadImageController extends Controller
     public function saveCutFile(Request $request, $id)
     {
 
-
-        $path = self::$path_img .'/'. self::$path_mini;
+        $path = self::$path_img . '/' . self::$path_mini;
 
         $data = json_decode($request->data);
 
-        $newFile = $path . '/' .pathinfo($data->property->url, PATHINFO_FILENAME);
-
-        $nameExt = pathinfo($data->property->url, PATHINFO_EXTENSION);
+        $newFile = $path . '/' . basename($data->property->url);
+// return response()->json($newFile);
         // $newFile = $path . '/' .basename($data->property->url);
 
-
-
         $file = MyImageService::cropStorage($data->property->image, $path);
-        return response()->json($id);
-        if(Storage::exists($newFile)) {
-            // return $newFile;
-// return response()->json($newFile);
-            Storage::delete($newFile);}
 
-        Storage::move($file, $newFile);
-
-        UploadImage::where('id',$id)->update(['path_mini'=>self::$path_mini]);
+        $newFile = $this->moveImgCut($file, $newFile);
+     // return response()->json($newFile);
+        UploadImage::where('id', $id)->update(['path_mini' => self::$path_mini]);
         // $image->save();
 
         return response()->json(Storage::url($newFile));
@@ -138,6 +133,7 @@ class UploadImageController extends Controller
         $image->post_id = 0;
         return (string) \View::make('up-file::components.cut-img.cut-img-card', ['images' => [$image]]);
     }
+
     /**
      * [resizeImg description]
      * @param  [type] $property [description]
@@ -147,7 +143,7 @@ class UploadImageController extends Controller
     public function resizeImg($property, $path)
     {
 
-        $image = ImageResize::make(Storage::path($path));
+        $image = ImageTools::make(Storage::path($path));
 
         if ($property->heightImg > 0) {
 
@@ -162,5 +158,24 @@ class UploadImageController extends Controller
 
     }
 
+    public function moveImgCut($file, $newFile)
+    {
+
+
+
+        // $extFile = pathinfo($data->property->url, PATHINFO_EXTENSION);
+
+        // if (Storage::exists($newFile)) {
+        //     // return response()->json($newFile);
+        //     Storage::delete($newFile);
+        // }
+
+        $image = ImageTools::make(Storage::path($file));
+        Storage::delete($file);
+// return $extFile;
+        $image->save(Storage::path($newFile));
+
+        // Storage::move($file, $newFile);
+    }
 
 }
