@@ -16,35 +16,22 @@ class UploadImageController extends Controller
 
     public function store(Request $request)
     {
-
 // return response()->json($request);
-        // $validatedData = $request->validate([
-        //     'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-
         $data = json_decode($request->data);
 
         $upImg = new UploadImage;
-// return response()->json($data->property);
-        // if(isset($data->property->image))
-        //    $upImg->path =  MyImageService::cropProperty($data->property, 'public/images');
-        // else{
-        // $path_img='public/images';
         //записываем изображение в хранилище
         $fileImg = $request->file('image')->store(self::$path_img);
-
-        // $upImg->name_img = pathinfo($fileImg, PATHINFO_BASENAME);
-        // return response()->json($upImg->path_img);
         // меняем размер изображения
         $pathImg = $this->resizeImg($data->property, $fileImg);
 
         $upImg->name_img =  pathinfo($pathImg, PATHINFO_FILENAME);
         $upImg->ext_img = pathinfo($pathImg, PATHINFO_EXTENSION);
-        // }
         //получаем урл без файла
         $upImg->url_img = Storage::url(self::$path_img);
         //полный урл с файлом
         $upImg->url = Storage::url($pathImg);
-        //
+
         foreach ($data->table as $key => $value) {
             $upImg->$key = $value;
         }
@@ -121,9 +108,6 @@ class UploadImageController extends Controller
     public function imageAlt(Request $request)
     {
 
-        // $modelImage = $this->modelCheck($request);
-
-        // $img = $modelImage->where('id', $request->id)->first();
         $image      = UploadImage::find($request->id);
         $image->alt = $request->alt;
 
@@ -152,7 +136,7 @@ class UploadImageController extends Controller
         $image = ImageTools::make(Storage::path($fileImg));
 
         Storage::delete($fileImg);
-// die(response()->json($property));
+
         if ('100%' != $property->heightImg && '100%' != $property->widthImg ) {
 
             if ($property->heightImg > 0) {

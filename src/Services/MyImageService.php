@@ -43,26 +43,6 @@ class MyImageService
 
     }
 
-        public function moveImgCut($file, $newFile)
-    {
-
-
-
-        // $extFile = pathinfo($data->property->url, PATHINFO_EXTENSION);
-
-        // if (Storage::exists($newFile)) {
-        //     // return response()->json($newFile);
-        //     Storage::delete($newFile);
-        // }
-
-        $image = ImageTools::make(Storage::path($file));
-        Storage::delete($file);
-// return $extFile;
-        $image->save(Storage::path($newFile));
-
-        // Storage::move($file, $newFile);
-    }
-
      public static function cropProperty($property, $path)
     {
 
