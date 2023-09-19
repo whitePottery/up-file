@@ -3,6 +3,7 @@
 namespace UpFile\Services;
 
 use Illuminate\Support\Facades\Storage;
+use UpFile\Services\ImageTools;
 
 class MyImageService
 {
@@ -21,12 +22,10 @@ class MyImageService
         // dd($image_type_aux);
         $image_type   = $image_type_aux[1];
         $image_base64 = base64_decode($image_parts[1]);
-        $file         = $path . '/' . uniqid() . '.' . $image_type;
+        // $file         = $path . '/' . uniqid() . '.' . $image_type;
+        Storage::put($path, $image_base64);
 
-
-        Storage::put($file, $image_base64);
-
-        return $file;
+        return $path;
     }
 
     /**
@@ -42,6 +41,26 @@ class MyImageService
         return self::saveBase64($image, $path);
 
 
+    }
+
+        public function moveImgCut($file, $newFile)
+    {
+
+
+
+        // $extFile = pathinfo($data->property->url, PATHINFO_EXTENSION);
+
+        // if (Storage::exists($newFile)) {
+        //     // return response()->json($newFile);
+        //     Storage::delete($newFile);
+        // }
+
+        $image = ImageTools::make(Storage::path($file));
+        Storage::delete($file);
+// return $extFile;
+        $image->save(Storage::path($newFile));
+
+        // Storage::move($file, $newFile);
     }
 
      public static function cropProperty($property, $path)

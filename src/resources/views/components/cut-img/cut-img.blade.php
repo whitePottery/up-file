@@ -334,7 +334,9 @@
 
                 $croppCrop[nameModal].croppie('result', {
                     type: 'canvas',
-                    size: 'viewport'
+                    size: 'viewport',
+                    format: 'jpeg'
+
                 }).then(function(resp) {
 
                     // $('#img-croping-'+nameModal).attr('src',resp);
