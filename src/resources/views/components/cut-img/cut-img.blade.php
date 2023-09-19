@@ -107,7 +107,7 @@
       background: url(/cropping.png) 0 0 no-repeat;
     }
     .img-item .img-green {
-      background: url(/cropping_green.png) 0 0 no-repeat;
+      background: url(/cropping_green1.png) 0 0 no-repeat;
     }
 
     .modal-alt{

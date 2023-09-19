@@ -12,7 +12,7 @@ class UploadImageController extends Controller
 {
 
     public static $path_img  = 'public/images';
-    public static $path_mini = 'cut';
+    public static $path_mini = 'public/images/cut';
 
     public function store(Request $request)
     {
@@ -25,12 +25,12 @@ class UploadImageController extends Controller
         // меняем размер изображения
         $pathImg = $this->resizeImg($data->property, $fileImg);
 
-        $upImg->name_img =  pathinfo($pathImg, PATHINFO_FILENAME);
-        $upImg->ext_img = pathinfo($pathImg, PATHINFO_EXTENSION);
+        // $name_img = pathinfo($pathImg, PATHINFO_FILENAME);
+        // $ext_img  = pathinfo($pathImg, PATHINFO_EXTENSION);
         //получаем урл без файла
-        $upImg->url_img = Storage::url(self::$path_img);
+        $upImg->src = Storage::url($pathImg);
         //полный урл с файлом
-        $upImg->url = Storage::url($pathImg);
+
 
         foreach ($data->table as $key => $value) {
             $upImg->$key = $value;
@@ -63,8 +63,6 @@ class UploadImageController extends Controller
     public function delete(Request $request)
     {
 
-        // $modelImage = $this->modelCheck($request);
-        // return ($modelImage);
         $image = UploadImage::find($request->id);
 // return($image);
         $msq    = Storage::delete(self::$path_img . '/' . $image->name_img);
@@ -83,23 +81,20 @@ class UploadImageController extends Controller
      */
     public function saveCutFile(Request $request, $id)
     {
-
-        $path = self::$path_img . '/' . self::$path_mini;
+// $upImg->src_cut = Storage::url(self::$path_mini.'/'.$name_img.'.'.$ext_img);
+        // $path = self::$path_mini;
 
         $data = json_decode($request->data);
 
-        $newFile = $path . '/' . basename($data->property->url);
+        $newFile = self::$path_mini . '/' . basename($data->property->url);
 // return response()->json($newFile);
         // $newFile = $path . '/' .basename($data->property->url);
 
-        $file = MyImageService::cropStorage($data->property->image, $newFile);
+        $src_cut = MyImageService::cropStorage($data->property->image, $newFile);
 
-        // $newFile = $this->moveImgCut($file, $newFile);
-        // return response()->json($newFile);
-        UploadImage::where('id', $id)->update(['path_mini' => self::$path_mini]);
-        // $image->save();
+        UploadImage::where('id', $id)->update(['src_cut' => $src_cut]);
 
-        return response()->json(Storage::url($newFile));
+        return response()->json($src_cut);
     }
 
 /*
@@ -107,6 +102,10 @@ class UploadImageController extends Controller
  */
     public function imageAlt(Request $request)
     {
+        $data = $request->validate([
+            'alt' => 'required|string|max:300',
+
+        ]);
 
         $image      = UploadImage::find($request->id);
         $image->alt = $request->alt;
@@ -132,12 +131,13 @@ class UploadImageController extends Controller
         $path     = pathinfo($fileImg, PATHINFO_DIRNAME);
         $nameImg  = pathinfo($fileImg, PATHINFO_FILENAME) . '.jpg';
         $path_jpg = $path . '/' . $nameImg;
+        $path_cut = $path . '/cut/' . $nameImg;
 
         $image = ImageTools::make(Storage::path($fileImg));
 
         Storage::delete($fileImg);
 
-        if ('100%' != $property->heightImg && '100%' != $property->widthImg ) {
+        if ('100%' != $property->heightImg && '100%' != $property->widthImg) {
 
             if ($property->heightImg > 0) {
 

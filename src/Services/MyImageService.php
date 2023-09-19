@@ -25,7 +25,7 @@ class MyImageService
         // $file         = $path . '/' . uniqid() . '.' . $image_type;
         Storage::put($path, $image_base64);
 
-        return $path;
+        return Storage::url($path);
     }
 
     /**
