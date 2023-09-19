@@ -72,7 +72,7 @@ class ImageModel extends Model
             ->when($name_model, function ($query, $name_model) {
                 return $query->where('name_model', $name_model);
             },
-            function ($query, $name_model) {
+            function ($query) {
                 return $query->where('name_model', 'LIKE', '%-'.$this->table);
             })
             ->offset(0)->limit($limit)->get();

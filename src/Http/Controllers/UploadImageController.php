@@ -31,7 +31,6 @@ class UploadImageController extends Controller
         $upImg->src = Storage::url($pathImg);
         //полный урл с файлом
 
-
         foreach ($data->table as $key => $value) {
             $upImg->$key = $value;
         }
@@ -46,11 +45,11 @@ class UploadImageController extends Controller
     public function getImage(UploadImage $upImg, $nameImg, $user_id, $postId = 0)
     {
 
-        if (0 == $postId) {
-            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('name_img', $nameImg)->where('post_id', $postId)->where('user_id', $user_id)->get();
-        } else {
-            $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('name_img', $nameImg)->where('post_id', $postId)->get();
-        }
+        $images = $upImg->select('id', 'url', 'post_id', 'user_id')->where('name_img', $nameImg)->where('post_id', $postId)
+        ->when(0 == $postId,function ($query) use( $user_id ) {
+            $query->where('user_id', $user_id);
+        })
+        ->get();
 
         $responce = ['images' => $images];
 
