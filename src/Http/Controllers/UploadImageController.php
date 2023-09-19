@@ -12,7 +12,7 @@ class UploadImageController extends Controller
 {
 
     public static $path_img  = 'public/images';
-    public static $path_mini = 'public/images/cut';
+    public static $path_cut = 'public/images/cut';
 
     public function store(Request $request)
     {
@@ -63,9 +63,11 @@ class UploadImageController extends Controller
     {
 
         $image = UploadImage::find($request->id);
-// return($image);
-        $msq    = Storage::delete(self::$path_img . '/' . $image->name_img);
-        $msq    = Storage::delete(self::$path_img . '/' . self::$path_mini . '/' . $image->name_img);
+        $nameImg = basename($image->src);
+
+        $msq    = Storage::delete(self::$path_img . '/' . $nameImg);
+        $msq    = Storage::delete(self::$path_cut . '/' . $nameImg);
+
         $images = $image->delete();
 
         $responce = ['message' => 'Image deleted'];
@@ -80,12 +82,12 @@ class UploadImageController extends Controller
      */
     public function saveCutFile(Request $request, $id)
     {
-// $upImg->src_cut = Storage::url(self::$path_mini.'/'.$name_img.'.'.$ext_img);
-        // $path = self::$path_mini;
+// $upImg->src_cut = Storage::url(self::$path_cut.'/'.$name_img.'.'.$ext_img);
+        // $path = self::$path_cut;
 
         $data = json_decode($request->data);
 
-        $newFile = self::$path_mini . '/' . basename($data->property->url);
+        $newFile = self::$path_cut . '/' . basename($data->property->url);
 // return response()->json($newFile);
         // $newFile = $path . '/' .basename($data->property->url);
 
