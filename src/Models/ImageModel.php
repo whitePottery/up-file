@@ -66,14 +66,22 @@ class ImageModel extends Model
      * [getImages description]
      * @return [type] [description]
      */
-    public function getImages($nameImg = '', $limit = 100)
+    public function getImages($name_model = '', $limit = 100)
     {
-
         return UploadImage::where('post_id', $this->id)
-            ->when($nameImg, function ($query, $nameImg) {
-                return $query->where('name_img', $nameImg);
+            ->when($name_model, function ($query, $name_model) {
+                return $query->where('name_model', $name_model);
+            },
+            function ($query, $name_model) {
+                return $query->where('name_model', 'LIKE', '%-'.$this->table);
             })
-            ->where('name_model', $this->table)->offset(0)->limit($limit)->get();
+            ->offset(0)->limit($limit)->get();
+
+        // return UploadImage::where('post_id', $this->id)
+        //     ->when($nameImg, function ($query, $nameImg) {
+        //         return $query->where('name_img', $nameImg);
+        //     })
+        //     ->where('name_model', $this->table)->offset(0)->limit($limit)->get();
     }
 
     /**

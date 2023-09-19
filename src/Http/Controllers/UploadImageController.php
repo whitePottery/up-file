@@ -35,14 +35,16 @@ class UploadImageController extends Controller
         // $upImg->name_img = pathinfo($fileImg, PATHINFO_BASENAME);
         // return response()->json($upImg->path_img);
         // меняем размер изображения
-        $upImg->name_img = $this->resizeImg($data->property, $fileImg);
+        $pathImg = $this->resizeImg($data->property, $fileImg);
 
-        // $upImg->name_img =  pathinfo($fileImg, PATHINFO_FILENAME);
-        $upImg->ext_img = pathinfo($fileImg, PATHINFO_EXTENSION);
+        $upImg->name_img =  pathinfo($pathImg, PATHINFO_FILENAME);
+        $upImg->ext_img = pathinfo($pathImg, PATHINFO_EXTENSION);
         // }
-        //получаем урл изображения
+        //получаем урл без файла
         $upImg->url_img = Storage::url(self::$path_img);
-
+        //полный урл с файлом
+        $upImg->url = Storage::url($pathImg);
+        //
         foreach ($data->table as $key => $value) {
             $upImg->$key = $value;
         }
@@ -150,19 +152,23 @@ class UploadImageController extends Controller
         $image = ImageTools::make(Storage::path($fileImg));
 
         Storage::delete($fileImg);
+// die(response()->json($property));
+        if ('100%' != $property->heightImg && '100%' != $property->widthImg ) {
 
-        if ($property->heightImg > 0) {
+            if ($property->heightImg > 0) {
 
-            $image->resizeToHeight($property->heightImg);
+                $image->resizeToHeight($property->heightImg);
 
-        } elseif ($property->widthImg > 0) {
+            } elseif ($property->widthImg > 0) {
 
-            $image->resizeToWidth($property->widthImg);
+                $image->resizeToWidth($property->widthImg);
+            }
+
         }
 
         $image->save(Storage::path($path_jpg), IMAGETYPE_JPEG);
 
-        return $nameImg;
+        return $path_jpg;
 
     }
 

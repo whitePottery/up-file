@@ -177,7 +177,7 @@
           'POST', '/add-image',
           UpImg_obj.createImageData(inputFile,data),
           function(msg){
-          // console.log(msg);
+          console.log(msg);
             const data = JSON.parse(msg);
             if(!data.error) {
 
