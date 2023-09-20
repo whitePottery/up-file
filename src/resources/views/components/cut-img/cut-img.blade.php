@@ -33,7 +33,7 @@
                         <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">
                             {{ __('upfile.close_window') }}
                         </button>
-                        <button class="btn btn-primary image-result" type="button" onclick="saveCut('{{ $nameModel }}')">
+                        <button class="btn btn-primary image-result" type="button" onclick="CutImg.saveCut('{{ $nameModel }}')">
                             {{ __('upfile.save_changes') }}
                         </button>
                     </div>
@@ -318,9 +318,10 @@
       },
 
 }
-
-            let name='';
-            let $croppCrop={};
+const CutImg = {
+            name:'',
+            $croppCrop:{},
+            divActiveImage:'',
 
             // $('input[name="{{ $nameModel }}"]').attr("id", "{{ $nameModel }}");
 
@@ -330,9 +331,9 @@
             //     }
             // });
 
-            function saveCut(nameModal) {
+            saveCut(nameModal) {
 
-                $croppCrop[nameModal].croppie('result', {
+                this.$croppCrop[nameModal].croppie('result', {
                     type: 'canvas',
                     size: 'viewport',
                     format: 'jpeg'
@@ -341,37 +342,37 @@
 
                     // $('#img-croping-'+nameModal).attr('src',resp);
 
-                    sendCutFile(resp);
+                    CutImg.sendCutFile(resp);
 
                     // $('#'+nameModal).attr('value',resp);
 
                     $('.modal').modal('hide');
                 });
-            }
+            },
 
-            function imgCroping(id){
+            imgCroping(id){
 
                 divActiveImage = document.getElementById(id);
                 name = divActiveImage.closest('.img-list').dataset.type;
                 image = divActiveImage.querySelector('img');
 // console.log(image);
-                $croppCrop[name]= setObjectCrop();
+                this.$croppCrop[name]= this.setObjectCrop();
 
                 $('.'+name).modal('show');
 
-                $croppCrop[name].croppie('bind', {
+                this.$croppCrop[name].croppie('bind', {
                         url: image.src
                     }).then(function() {
 
                         console.log('jQuery bind complete');
                     });
-            }
+            },
 
-            function setObjectCrop(){
+            setObjectCrop(){
 
-                if($croppCrop.hasOwnProperty(name)) {
+                if(this.$croppCrop.hasOwnProperty(name)) {
 
-                    return $croppCrop[name];
+                    return this.$croppCrop[name];
                 }
 
                 let stock = document.getElementById('data-'+name);
@@ -389,9 +390,9 @@
                         height: 50+Number(stock.dataset.heightCut),
                     }
                 });
-            }
+            },
 
-            function sendCutFile(resp){
+            sendCutFile(resp){
 
                 let stock = document.getElementById('data-'+name);
 
@@ -411,9 +412,10 @@
                    },
                 });
 
-                UpImg_obj.sendAjax(
+                // upImgObj = UpImg_obj;
+               UpImg_obj.sendAjax(
                   'POST', '/add-cut/'+divActiveImage.dataset.id,
-                  createCutData(data),
+                  this.createCutData(data),
                   function(msg){
                   // console.log(msg);
                     const data = JSON.parse(msg);
@@ -435,19 +437,19 @@
 
                     } else { alert(data.error); }
                 });
-            }
+            },
 
-            function createCutData(data){
+            createCutData(data){
 
                 const formData = new FormData(); // создаем объект FormData для передачи файла
 
                 formData.append('data', data); // добавляем данные в объект FormData
 
                 return formData;
-            }
+            },
 
 
-            function viewCutImage(id){
+            viewCutImage(id){
 
                 // divActiveImage = document.getElementById(id);
                 // image = divActiveImage.querySelector('img');
@@ -466,7 +468,8 @@
                 $elem.mouseout(function(e){
                   $('#cut_'+id).css('display','none');
                 });
-            }
+            },
+}
 
          </script>
     @endpush
