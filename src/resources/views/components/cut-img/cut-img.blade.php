@@ -203,7 +203,7 @@
         let modalDialog = modal.querySelector('.modal-dialog');
         let inputModal = modal.querySelector('input');
         inputModal.value = inputAlt.value;
-        var rect = divActiveImage.getBoundingClientRect();
+        let rect = divActiveImage.getBoundingClientRect();
         modal.style.display='block';
         inputModal.focus();
         modalDialog.style.top = rect.top-300+"px";
@@ -415,7 +415,7 @@
                   'POST', '/add-cut/'+divActiveImage.dataset.id,
                   createCutData(data),
                   function(msg){
-                  console.log(msg);
+                  // console.log(msg);
                     const data = JSON.parse(msg);
                     if(!data.error) {
 
@@ -452,7 +452,7 @@
                 // divActiveImage = document.getElementById(id);
                 // image = divActiveImage.querySelector('img');
                 // id_cut = divActiveImage.dataset.id;
-$elem = $('#img_'+id).find('.img-croping');
+                $elem = $('#img_'+id).find('.img-croping');
 
                 $elem.mousemove(function(e){
                    $('#cut_'+id).css('display','block');
@@ -463,12 +463,9 @@ $elem = $('#img_'+id).find('.img-croping');
                    $('#cut_'+id).css({'left':x, 'top':y})
                 });
 
-      $elem.mouseout(function(e){
-        $('#cut_'+id).css('display','none');
-      });
-
-
-
+                $elem.mouseout(function(e){
+                  $('#cut_'+id).css('display','none');
+                });
             }
 
          </script>
