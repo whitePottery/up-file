@@ -76,12 +76,6 @@ class ImageModel extends Model
                 return $query->where('name_model', 'LIKE', '%-'.$this->table);
             })
             ->offset(0)->limit($limit)->get();
-
-        // return UploadImage::where('post_id', $this->id)
-        //     ->when($nameImg, function ($query, $nameImg) {
-        //         return $query->where('name_img', $nameImg);
-        //     })
-        //     ->where('name_model', $this->table)->offset(0)->limit($limit)->get();
     }
 
     /**

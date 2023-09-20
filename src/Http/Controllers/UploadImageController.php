@@ -82,14 +82,10 @@ class UploadImageController extends Controller
      */
     public function saveCutFile(Request $request, $id)
     {
-// $upImg->src_cut = Storage::url(self::$path_cut.'/'.$name_img.'.'.$ext_img);
-        // $path = self::$path_cut;
 
         $data = json_decode($request->data);
 
         $newFile = self::$path_cut . '/' . basename($data->property->url);
-// return response()->json($newFile);
-        // $newFile = $path . '/' .basename($data->property->url);
 
         $src_cut = MyImageService::cropStorage($data->property->image, $newFile);
 
@@ -105,10 +101,10 @@ class UploadImageController extends Controller
     {
         $data = $request->validate([
             'alt' => 'required|string|max:300',
-
         ]);
 
         $image      = UploadImage::find($request->id);
+
         $image->alt = $request->alt;
 
         return $image->save();
@@ -117,6 +113,7 @@ class UploadImageController extends Controller
     private function cardCreate($image)
     {
         $image->post_id = 0;
+
         return (string) \View::make('up-file::components.cut-img.cut-img-card', ['images' => [$image]]);
     }
 
