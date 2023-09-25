@@ -24,6 +24,8 @@ class CutImg extends Component
     public $widthCut;
     public $heightCut;
 
+    public $onlyCut = false;
+
     // public $modelImg;
     /**
      * Create a new component instance.
@@ -42,13 +44,13 @@ class CutImg extends Component
 
         $this->user_id = auth()->id();
 
-        $this->widthImg=$maxWidth;
-        $this->heightImg=$maxHeight;
+        $this->widthImg  = $maxWidth;
+        $this->heightImg = $maxHeight;
 
-        $this->widthCut=$width;
-        $this->heightCut=$height;
+        $this->widthCut  = $width;
+        $this->heightCut = $height;
 
-        $this->cardCreate();
+        $this->cardCreate($maxWidth, $maxHeight);
 
         // $this->modelImg = $modelImg?json_encode($modelImg):0;
     }
@@ -64,14 +66,17 @@ class CutImg extends Component
 
     }
 
-    private function cardCreate()
+    private function cardCreate($maxWidth, $maxHeight)
     {
 
         $data = UploadImage::select('id', 'src', 'src_cut', 'post_id', 'user_id', 'alt')->where('name_model', $this->nameModel)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
 
-        // $data->tmpStyle = 'style = \"opacity:0.5\"';
-        // dd($this->postId);
-        $this->images = \View::make('up-file::components.cut-img.cut-img-card', ['images' => $data]);
+        if (0 == $maxWidth && 0 == $maxHeight) {
+
+            $this->onlyCut = true;
+        }
+
+        $this->images = \View::make('up-file::components.cut-img.cut-img-card', ['images' => $data, 'onlyCut' => $this->onlyCut]);
     }
 
 }

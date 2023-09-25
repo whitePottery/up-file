@@ -4,9 +4,9 @@
         <input type="hidden" id="{{ $nameModel }}" name="{{ $nameModel }}" value="">
         </div>
     </div> --}}
-    <div id="data-{{ $nameModel }}" data-width-cut="{{ $widthCut }}" data-height-cut="{{ $heightCut }}" data-width-img="{{ $widthImg }}" data-height-img="{{ $heightImg }}">
+    <div id="data-{{ $nameModel }}" data-width-cut="{{ $widthCut }}" data-height-cut="{{ $heightCut }}" data-width-img="{{ $widthImg }}" data-height-img="{{ $heightImg }}" data-only-cut="{{ $onlyCut }}">
       <div class="form-row">
-        <label>{{ __('upfile::upfile.images') }}:</label>
+        <label>{{ __('upfile::upfile.images.'.$nameModel ) }}:</label>
           <div class="img-list" id="js-file-list-{{ $nameModel }}" data-type="{{ $nameModel }}">{!! $images??'' !!}</div>
           <input id="{{ $nameModel }}" type="file" name="file" enctype="multipart/form-data" accept=".jpg,.jpeg,.png,.gif" onchange="UpImg_obj.sendFile(this);">
       </div>
@@ -125,6 +125,16 @@
     .modal-alt-input{
         width: 90%;
     }
+
+    .img-item .cut-img{
+      border: 1px solid #767676;
+      height: 200px;
+
+    }
+    .img-item .shadow-img{
+      box-shadow: 10px 5px 5px grey;
+    }
+
     .img-item .cut-img-hidden{
       display:none;
       position: absolute;
@@ -323,14 +333,6 @@ const CutImg = {
             $croppCrop:{},
             divActiveImage:'',
 
-            // $('input[name="{{ $nameModel }}"]').attr("id", "{{ $nameModel }}");
-
-            // $.ajaxSetup({
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     }
-            // });
-
             saveCut(nameModal) {
 
                 this.$croppCrop[nameModal].croppie('result', {
@@ -393,6 +395,7 @@ const CutImg = {
             },
 
             sendCutFile(resp){
+                let img_cut='';
 
                 let stock = document.getElementById('data-'+name);
 
@@ -426,14 +429,23 @@ const CutImg = {
 
                   $("#cut_"+id).remove();
 
+                  if(stock.dataset.onlyCut) {
+
+                    img_cut = '<img id="cut_'+id+'" class="cut-img" src="'+resp+'">';
+                    $('#img_'+id).find('.img-upload').addClass('cut-img-hidden');
+                  }else{
+
+                    img_cut = '<img id="cut_'+id+'" class="cut-img-hidden shadow-img" src="'+resp+'">';
+                  }
+
                   divActiveImage.insertAdjacentHTML( 'beforeend',
-                        '<img id="cut_'+id+'" class="cut-img-hidden" src="'+resp+'">' );
+                        img_cut+
+                        `<input type="hidden" value="`+data+`" id="src_cut[0]" class="alt">
+                        ` );
+
+
 
                   $('#img_'+id).find('.img-croping').css('background-image','url(/cropping_green1.png)')
-
-
-
-
 
                     } else { alert(data.error); }
                 });

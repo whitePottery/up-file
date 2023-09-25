@@ -114,7 +114,7 @@ class UploadImageController extends Controller
     {
         $image->post_id = 0;
 
-        return (string) \View::make('up-file::components.cut-img.cut-img-card', ['images' => [$image]]);
+        return (string) \View::make('up-file::components.cut-img.cut-img-card', ['images' => [$image], 'onlyCut'=>false]);
     }
 
     /**
