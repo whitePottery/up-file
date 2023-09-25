@@ -128,7 +128,7 @@
 
     .img-item .cut-img{
       border: 1px solid #767676;
-      height: 200px;
+      height: 150px;
 
     }
     .img-item .shadow-img{
@@ -440,8 +440,7 @@ const CutImg = {
 
                   divActiveImage.insertAdjacentHTML( 'beforeend',
                         img_cut+
-                        `<input type="hidden" value="`+data+`" id="src_cut[0]" class="alt">
-                        ` );
+                        '<input type="hidden" name="src_cut['+id+']" value="'+data+'" id="src_cut['+id+']" class="alt">');
 
 
 
