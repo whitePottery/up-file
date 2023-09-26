@@ -424,27 +424,31 @@ const CutImg = {
                     const data = JSON.parse(msg);
                     if(!data.error) {
 
-                  id = divActiveImage.dataset.id;
+                      id = divActiveImage.dataset.id;
 
-
-                  $("#cut_"+id).remove();
-
-                  if(stock.dataset.onlyCut) {
-
-                    img_cut = '<img id="cut_'+id+'" class="cut-img" src="'+resp+'">';
-                    $('#img_'+id).find('.img-upload').addClass('cut-img-hidden');
-                  }else{
-
-                    img_cut = '<img id="cut_'+id+'" class="cut-img-hidden shadow-img" src="'+resp+'">';
-                  }
-
-                  divActiveImage.insertAdjacentHTML( 'beforeend',
-                        img_cut+
-                        '<input type="hidden" name="src_cut['+id+']" value="'+data+'" id="src_cut['+id+']" class="alt">');
+                      if($('#src_cut_'+id).length){
+                        $("#cut_"+id).remove();
+                        $('#src_cut_'+id).remove();
+                      }
 
 
 
-                  $('#img_'+id).find('.img-croping').css('background-image','url(/cropping_green1.png)')
+                      if(stock.dataset.onlyCut) {
+
+                        img_cut = '<img id="cut_'+id+'" class="cut-img" src="'+resp+'">';
+
+                        $('#img_'+id).find('.img-upload').addClass('cut-img-hidden');
+                      }else{
+
+                        img_cut = '<img id="cut_'+id+'" class="cut-img-hidden shadow-img" src="'+resp+'">';
+                      }
+
+                      divActiveImage.insertAdjacentHTML( 'beforeend',
+                          img_cut+
+                          '<input type="hidden" name="'+name+'_cut['+id+']" value="'+data+'" id="src_cut_'+id+'" class="alt">');
+                      $('#img_'+id).find('.img-croping').css('background-image','url(/cropping_green1.png)')
+
+
 
                     } else { alert(data.error); }
                 });

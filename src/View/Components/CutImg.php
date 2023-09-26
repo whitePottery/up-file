@@ -69,7 +69,7 @@ class CutImg extends Component
     private function cardCreate($maxWidth, $maxHeight)
     {
 
-        $data = UploadImage::select('id', 'src', 'src_cut', 'post_id', 'user_id', 'alt')->where('name_model', $this->nameModel)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
+        $data = UploadImage::select('id', 'name_model','src', 'src_cut', 'post_id', 'user_id', 'alt')->where('name_model', $this->nameModel)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
 
         if (0 == $maxWidth && 0 == $maxHeight) {
 
