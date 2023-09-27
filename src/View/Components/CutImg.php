@@ -35,7 +35,7 @@ class CutImg extends Component
     public function __construct($name, $postId = 0, $width = 0, $height = 0, $maxWidth = 0, $maxHeight = 0) //, $modelImg = false)
 
     {
-        $this->nameModel = $name;
+        $this->nameModel = str_replace('-','_',$name);
         // $this->nameImg = explode('-', $name)[0];
 
         // $this->nameModel = explode('-', $name)[1] ?? die('в компоненте - "x-upfile-up-img" атрибут name должен иметь вид "name-model" '); //str_replace('.','_',\Request::route()->getName());
@@ -70,7 +70,7 @@ class CutImg extends Component
     {
 
         $data = UploadImage::select('id', 'name_model','src', 'src_cut', 'post_id', 'user_id', 'alt')->where('name_model', $this->nameModel)->where('post_id', $this->postId)->where('user_id', $this->user_id)->get();
-
+// dd($data);
         if (0 == $maxWidth && 0 == $maxHeight) {
 
             $this->onlyCut = true;

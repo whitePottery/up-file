@@ -89,6 +89,11 @@ class Image заменить своим
 
 функция удаления оригиналов в модели
 
+mini-projects convert to mini_projects
+
+  <x-upfile-cut-img class="" name="mini-projects" width="500" height="300"/>
+  <x-upfile-cut-img class="" :post-id="$project->id" name="mini-projects" width="500" height="300"/>
+
 
 
 

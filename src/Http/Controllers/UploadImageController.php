@@ -85,7 +85,7 @@ class UploadImageController extends Controller
 
         $data = json_decode($request->data);
 
-        $newFile = self::$path_cut . '/' . basename($data->property->url);
+        $newFile = self::$path_cut . '/' . basename($data->property->url).uniqid('&_');
 
         $src_cut = MyImageService::cropStorage($data->property->image, $newFile);
 

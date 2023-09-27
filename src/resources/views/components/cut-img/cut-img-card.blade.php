@@ -11,5 +11,3 @@
         <input type="hidden" name="{{ $image->name_model }}[{{ $image->id }}]" value="{{ $image->src }}" id="src_{{ $image->id }}" class="alt">
   </div>
 @endforeach
-
-      {{-- @if($onlyCut) --}}
