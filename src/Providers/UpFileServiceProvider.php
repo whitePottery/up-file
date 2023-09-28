@@ -28,9 +28,11 @@ class UpFileServiceProvider extends ServiceProvider
         $copyList = [
 
             // 'migrations'  => database_path('migrations'),
-            'Controllers' => app_path('Http/Controllers/UpFile'),
-            'views'       => resource_path('views/up-file'),
-            'js'          => public_path('js/up-file'),
+            // 'Controllers' => app_path('Http/Controllers/UpFile'),
+            'views'       => resource_path('views'),
+            'js'          => public_path('up-file/js'),
+            'css'          => public_path('up-file/css'),
+            'image'          => public_path('up-file/image'),
         ];
 
         $pathPackege = base_path('vendor/whitepottery/up-file/src/');
@@ -64,11 +66,16 @@ class UpFileServiceProvider extends ServiceProvider
             if (file_exists($pathFrom)) {
                 $this->publishes([
                     $pathFrom => $pathTo,
-                ], 'public');
+                ], 'upfile');
             }
 
         }
-
+        // $migrations_path = __DIR__ . '/../copy/views';
+        // if (file_exists($migrations_path)) {
+        //     $this->publishes([
+        //         $migrations_path => resource_path('views'),
+        //     ], 'upfile');
+        // }
         /*
     $this->publishes([
     __DIR__ . '/../copy/Controllers/UpFile' => app_path('Http/Controllers'),
