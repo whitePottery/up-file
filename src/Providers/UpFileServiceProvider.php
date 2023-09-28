@@ -25,16 +25,6 @@ class UpFileServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        $copyList = [
-
-            // 'migrations'  => database_path('migrations'),
-            // 'Controllers' => app_path('Http/Controllers/UpFile'),
-            'views'       => resource_path('views'),
-            'js'          => public_path('up-file/js'),
-            'css'          => public_path('up-file/css'),
-            'image'          => public_path('up-file/image'),
-        ];
-
         $pathPackege = base_path('vendor/whitepottery/up-file/src/');
 
         if ($this->app->runningInConsole()) {
@@ -55,9 +45,16 @@ class UpFileServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/up-file.php');
 
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'upfile');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'upfile');
 
-        $this->loadMigrationsFrom(__DIR__ .'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        $this->publishFiles($pathPackege);
+    }
+
+    private function publishFiles($pathPackege)
+    {
+        $copyList = $this->getListPublish();
 
         foreach ($copyList as $key => $pathTo) {
 
@@ -70,18 +67,19 @@ class UpFileServiceProvider extends ServiceProvider
             }
 
         }
-        // $migrations_path = __DIR__ . '/../copy/views';
-        // if (file_exists($migrations_path)) {
-        //     $this->publishes([
-        //         $migrations_path => resource_path('views'),
-        //     ], 'upfile');
-        // }
-        /*
-    $this->publishes([
-    __DIR__ . '/../copy/Controllers/UpFile' => app_path('Http/Controllers'),
-    ], 'public');
-     */
 
+    }
+
+    private function getListPublish()
+    {
+        return [
+            // 'migrations'  => database_path('migrations'),
+            // 'Controllers' => app_path('Http/Controllers/UpFile'),
+            'views' => resource_path('views'),
+            'js'    => public_path('up-file/js'),
+            'css'   => public_path('up-file/css'),
+            'image' => public_path('up-file/image'),
+        ];
     }
 
 }
