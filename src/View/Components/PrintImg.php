@@ -11,7 +11,7 @@ class PrintImg extends Component
     public $class;
     public $images;
     public $postId;
-    public $nameImg;
+    // public $nameImg;
 
     // public $modelImg;
     /**
@@ -22,9 +22,11 @@ class PrintImg extends Component
     public function __construct($name, $postId, $class = '') //, $modelImg = false)
 
     {
-        $this->nameImg = explode('-', $name)[0];
 
-        $this->nameModel = explode('-', $name)[1] ?? die('в компоненте - "x-upfile-up-img" атрибут name должен иметь вид "name-model" '); //str_replace('.','_',\Request::route()->getName());
+        // if(!isset(explode('-', $name)[1]))  die('в компоненте - "x-upfile-up-img" атрибут name должен иметь вид "name-model" ');
+        // if(explode('-', $name)[1]) die('в компоненте - "x-upfile-up-img" атрибут name должен иметь вид "name-model" ');
+
+        $this->nameModel = str_replace('-','_',$name);
 
         $this->postId = $postId;
 
@@ -41,14 +43,14 @@ class PrintImg extends Component
      */
     public function render()
     {
-        // return view('up-file::components.print-img.print-img');
-        return view('vendor.print-img.print-img');
+        return view('up-file::components.print-img.print-img');
+        // return view('vendor.print-img.print-img');
     }
 
     private function cardCreate()
     {
 
-        $this->images = UploadImage::select('id', 'url', 'alt')->where('name_img', $this->nameImg)->where('name_model', $this->nameModel)->where('post_id', $this->postId)->get();
+        $this->images = UploadImage::select('id', 'src', 'alt')->where('name_model', $this->nameModel)->where('post_id', $this->postId)->get();
 
     }
 

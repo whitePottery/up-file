@@ -27,7 +27,7 @@ class UpFileServiceProvider extends ServiceProvider
 
         $copyList = [
 
-            'migrations'  => database_path('migrations'),
+            // 'migrations'  => database_path('migrations'),
             'Controllers' => app_path('Http/Controllers/UpFile'),
             'views'       => resource_path('views/up-file'),
             'js'          => public_path('js/up-file'),
@@ -42,8 +42,8 @@ class UpFileServiceProvider extends ServiceProvider
         }
 
         $this->loadViewComponentsAs('upfile', [
-            \UpFile\View\Components\UpImg::class,
-            \UpFile\View\Components\Cut::class,
+            // \UpFile\View\Components\UpImg::class,
+            // \UpFile\View\Components\Cut::class,
             \UpFile\View\Components\PrintImg::class,
             \UpFile\View\Components\CutImg::class,
             // Button::class,
@@ -54,6 +54,8 @@ class UpFileServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/up-file.php');
 
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'upfile');
+
+        $this->loadMigrationsFrom(__DIR__ .'/../database/migrations');
 
         foreach ($copyList as $key => $pathTo) {
 

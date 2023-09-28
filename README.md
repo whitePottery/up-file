@@ -29,6 +29,10 @@ UpFile\Models\ImageModel;
 
 копировать миграции картинку
 
+resources/views/components/print-img/print-img.blade.php
+копировать в папку resources/views/vendor
+
+
 вставить @stack('styles') и @stack('js_scripts')
 
 

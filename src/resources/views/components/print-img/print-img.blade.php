@@ -3,7 +3,7 @@
     @isset($images)
     @foreach($images as $image)
       <li>
-        <img src="{{ $image->url }}" alt="{{ $image->alt }}">
+        <img src="{{ $image->src }}" alt="{{ $image->alt }}">
       </li>
     @endforeach
     @endisset
