@@ -89,7 +89,7 @@
     }
     .img-item .img-delete {
       display: inline-block;
-      background: url(/remove.png) 0 0 no-repeat;
+      background: url(/up-file/image/remove.png) 0 0 no-repeat;
       position: absolute;
       top: -5px;
       right: -9px;
