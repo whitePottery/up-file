@@ -12,7 +12,7 @@ composer require whitePottery/up-file
  Опубликовать js файлы, вью и миграции необходимые для работы пакета.
 Вызывать команду:
 ```
-php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
+php artisan vendor:publish --tag=upfile
 ```
 
 Выполнить миграцию
@@ -20,33 +20,51 @@ php artisan vendor:publish --provider="Pottery\Providers\PotteryServiceProvider"
     php artisan migrate
  ```
 
+В Html.blade файле добавить соответственно в низу стилей @stack('styles')
+и внизу под скриптами @stack('js_scripts')
+
+в модели которая будет использовать для обработки постов с изображениями
+сделать расширение от  ImageModel
+
+Пример:
+```
+use UpFile\Models\ImageModel;
+
+class News extends ImageModel
+{
+
+}
+
+```
+
+В файле blade.php в котором будут загружаться изображения вставить в нужном месте компонент.
+Например:
+страница админки  blog create
+
+```
+<x-upfile-cut-img class="" name="mini-blog" width="500" height="300" max-height="700"/>
+```
+страница админки  blog edit
+```
+<x-upfile-cut-img class="" :post-id="$blog->id" name="mini-blog" width="500" height="300"/>
+```
+
+В файле blade.php в котором будут выводиться изображения нужно вставить компонент
+например home blog
+```
+
+<x-upfile-print-img name="image-blog" :post-id="$blog->id" class="slider"/>
+```
+Файл для редактирования вывода изображений находится в папке:
+resources/views/vendor/print-img/print-img.blade.php
+
+Атрибуты компонента <x-upfile-cut-img/>
+
+name - название тега+название модели пишется через тире(name-model)
+
+Атрибуты компонента <x-upfile-print-img/>
 
 
-UpFile\Models\ImageModel;
-  class News extends ImageModel
-
-    use HasFactory;
-
-копировать миграции картинку
-
-resources/views/components/print-img/print-img.blade.php
-копировать в папку resources/views/vendor
-
-
-вставить @stack('styles') и @stack('js_scripts')
-
-
-скопировать миграции
-скопировать файл отсутствия картинки
-скопировать себе файлы query croppie css js в папки
-
-
-
-функция удаления оригиналов в модели
-
-
-  <x-upfile-cut-img class="" name="mini-projects" width="500" height="300"/>
-  <x-upfile-cut-img class="" :post-id="$project->id" name="mini-projects" width="500" height="300"/>
 
 
 
