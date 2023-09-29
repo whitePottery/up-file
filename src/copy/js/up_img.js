@@ -152,7 +152,14 @@
        */
       async sendAjax(type, url, data, callback){
 
-        let token = document.querySelector('meta[name="csrf-token"]').content
+        let token="";
+
+        if (document.querySelector('meta[name="csrf-token"]')){
+
+          token = document.querySelector('meta[name="csrf-token"]').content
+        }
+
+
 
         if (window.XMLHttpRequest)
         {// код для IE7+, Firefox, Chrome, Opera, Safari
@@ -294,7 +301,7 @@ const CutImg = {
                       divActiveImage.insertAdjacentHTML( 'beforeend',
                           img_cut+
                           '<input type="hidden" name="'+name+'_cut['+id+']" value="'+data+'" id="src_cut_'+id+'" class="alt">');
-                      $('#img_'+id).find('.img-croping').css('background-image','url(/cropping_green.png)')
+                      $('#img_'+id).find('.img-croping').css('background-image','url(/up-file/image/cropping_green.png)')
 
 
 

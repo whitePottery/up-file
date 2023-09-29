@@ -45,7 +45,7 @@
 @once
 
 <span id="post-data"
-  data-user-id="{{ $user_id }}"
+  data-user-id="{{ $user_id??'0'}}"
   data-post-id="{!! $postId??'0' !!}"
 ></span>
 
@@ -108,10 +108,10 @@
       cursor: pointer;
     }
     .img-item .img-black {
-      background: url(/cropping.png) 0 0 no-repeat;
+      background: url(/up-file/image/cropping.png) 0 0 no-repeat;
     }
     .img-item .img-green {
-      background: url(/cropping_green.png) 0 0 no-repeat;
+      background: url(/up-file/image/cropping_green.png) 0 0 no-repeat;
     }
 
     .modal-alt{
