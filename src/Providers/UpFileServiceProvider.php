@@ -27,18 +27,11 @@ class UpFileServiceProvider extends ServiceProvider
 
         $pathPackege = base_path('vendor/whitepottery/up-file/src/');
 
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                \UpFile\Console\Commands\ExampleCommand::class,
-            ]);
-        }
-
         $this->loadViewComponentsAs('upfile', [
-            // \UpFile\View\Components\UpImg::class,
-            // \UpFile\View\Components\Cut::class,
+
             \UpFile\View\Components\PrintImg::class,
             \UpFile\View\Components\CutImg::class,
-            // Button::class,
+
         ]);
 
         $this->loadViewsFrom($pathPackege . 'resources/views', 'up-file');
@@ -73,8 +66,6 @@ class UpFileServiceProvider extends ServiceProvider
     private function getListPublish()
     {
         return [
-            // 'migrations'  => database_path('migrations'),
-            // 'Controllers' => app_path('Http/Controllers/UpFile'),
             'views' => resource_path('views'),
             'js'    => public_path('up-file/js'),
             'css'   => public_path('up-file/css'),

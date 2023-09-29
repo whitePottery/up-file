@@ -44,7 +44,10 @@
 
 @once
 
-
+<span id="post-data"
+  data-user-id="{{ $user_id }}"
+  data-post-id="{!! $postId??'0' !!}"
+></span>
 
     <div class="modal-alt" tabindex="-1"  id="alt-text">
       <div class="modal-dialog">
@@ -68,9 +71,10 @@
     </div>
 
     @push('styles')
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css" rel="stylesheet">
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css" rel="stylesheet"> --}}
+        <link href="/up-file/css/croppie/2.6.2/croppie.min.css" rel="stylesheet">
 
-            <style>
+    <style>
     /* Стили для вывода превью */
     .img-item {
 
@@ -146,11 +150,13 @@
     @endpush
 
     @push('scripts')
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="/up-file/js/jquery/2.1.1/jquery.min.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.js"></script>
+        <script src="/up-file/js/croppie/2.6.2/croppie.js"></script>
 
-        <script type="text/javascript">
+        <script src="/up-file/js/up_img.js"></script>
+
+{{--         <script type="text/javascript">
     const UpImg_obj = {
 
       divActiveImage : '',
@@ -446,7 +452,7 @@ const CutImg = {
                       divActiveImage.insertAdjacentHTML( 'beforeend',
                           img_cut+
                           '<input type="hidden" name="'+name+'_cut['+id+']" value="'+data+'" id="src_cut_'+id+'" class="alt">');
-                      $('#img_'+id).find('.img-croping').css('background-image','url(/cropping_green1.png)')
+                      $('#img_'+id).find('.img-croping').css('background-image','url(/cropping_green.png)')
 
 
 
@@ -486,6 +492,6 @@ const CutImg = {
             },
 }
 
-         </script>
+         </script> --}}
     @endpush
 @endonce
