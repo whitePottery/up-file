@@ -21,7 +21,7 @@ php artisan vendor:publish --tag=upfile
  ```
 
 В Html.blade файле добавить соответственно в низу стилей @stack('styles')
-и внизу под скриптами @stack('js_scripts')
+и внизу под скриптами @stack('scripts')
 
 в модели которая будет использовать для обработки постов с изображениями
 сделать расширение от  ImageModel
@@ -30,7 +30,7 @@ php artisan vendor:publish --tag=upfile
 ```
 use UpFile\Models\ImageModel;
 
-class News extends ImageModel
+class Blog extends ImageModel
 {
 
 }
@@ -67,7 +67,11 @@ name - название тега+название модели пишется ч
 
 
 
+## удаление пакета
 
+```
+composer remove whitePottery/up-file
+```
 
 
 
