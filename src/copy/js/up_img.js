@@ -203,8 +203,8 @@ const CutImg = {
                     CutImg.sendCutFile(resp);
 
                     // $('#'+nameModal).attr('value',resp);
+                    this.closeModal();
 
-                    $('.modal').modal('hide');
                 });
             },
 
@@ -318,6 +318,10 @@ const CutImg = {
                 return formData;
             },
 
+            closeModal(){
+              $('.modal').modal('hide');
+              // $('.modal').css('display','none');
+            },
 
             viewCutImage(id){
 
