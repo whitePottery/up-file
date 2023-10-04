@@ -203,7 +203,7 @@ const CutImg = {
                     CutImg.sendCutFile(resp);
 
                     // $('#'+nameModal).attr('value',resp);
-                    this.closeModal();
+                    CutImg.closeModal();
 
                 });
             },
