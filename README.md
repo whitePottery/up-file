@@ -79,9 +79,9 @@ composer remove whitePottery/up-file
 ```
 
 
-
+<!--
 вынести css в отдельный файл
-# переделать модальное окно без батстрапа
+переделать модальное окно без батстрапа
 отказаться от croppie(написать самому)
 переписать все на чистом js
 
@@ -89,3 +89,4 @@ composer remove whitePottery/up-file
 для переопределения слов перевода
 создать нужные файлы в папке /resources/lang/vendor/upfile/en/image.php( английский вариант )
 upfile - тег определенный в провайдере vendor/whitepottery/up-file/src/Providers/UpFileServiceProvider.php( строка $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'upfile');)
+-->
