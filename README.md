@@ -20,10 +20,12 @@ php artisan vendor:publish --tag=upfile
     php artisan migrate
  ```
 
+
 В Html.blade файле добавить соответственно в низу стилей @stack('styles')
 и внизу под скриптами @stack('scripts')
 
-В модели которая будет использовать для обработки постов с изображениями
+
+>В модели которая будет использовать для обработки постов с изображениями
 сделать расширение от  ImageModel
 
 Пример:
@@ -84,7 +86,7 @@ resources/views/vendor/print-img/print-img.blade.php
 
 
 
-###Если не создана ссылка на папку storage введите команду:
+### Если не создана ссылка на папку storage введите команду:
 ```
 
 php artisan storage:link
