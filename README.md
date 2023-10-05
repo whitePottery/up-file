@@ -96,6 +96,7 @@ php artisan storage:link
 ## удаление пакета
 
 ```
+
 composer remove whitePottery/up-file
 ```
 

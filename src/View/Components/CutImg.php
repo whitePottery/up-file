@@ -42,7 +42,7 @@ class CutImg extends Component
 
         $this->postId = $postId;
 
-        $this->user_id = auth()->id();
+        $this->user_id = auth()->id()??0;
 
         $this->widthImg  = $maxWidth;
         $this->heightImg = $maxHeight;
